@@ -1,0 +1,126 @@
+#!/usr/bin/python
+
+# Copyright 2010 John Hedges
+#
+# This file is part of bhp.
+#
+# bhp is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# bhp is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# bhp. If not, see <http://www.gnu.org/licenses/>.
+
+import sys, serial, getopt
+from types import StringTypes
+
+class x10_message:
+    header = 0x04
+    codes = (0x06,0x0e,0x02,0x0a,0x01,0x09,0x05,0x0d,
+             0x07,0x0f,0x03,0x0b,0x00,0x08,0x04,0x0c)
+    def __init__(self, house):
+        if not (isinstance(house, StringTypes) and len(house) == 1):
+            raise ValueError()
+        self.house = house.lower()
+        if ord(self.house) < ord('a') or ord(self.house) > ord('p'):
+            raise ValueError()
+    def housecode(self):
+        return self.codes[ord(self.house)-ord('a')]
+        
+class x10_address_message(x10_message):
+    def __init__(self, house, device):
+        x10_message.__init__(self, house)
+        self.device = int(device)
+        if self.device < 1 or self.device > 16:
+            raise ValueError()
+
+    def __str__(self):
+        return chr(self.header) + chr((self.housecode() << 4) | self.codes[self.device-1])
+
+class x10_function_message(x10_message):
+    functions = { 'on' : 0x02, 'off' : 0x03 }
+                  
+    def __init__(self, house, function):
+        x10_message.__init__(self, house)
+        self.function = function.lower()
+        if not self.functions.has_key(self.function):
+            raise ValueError()
+
+    def __str__(self):
+        return chr(self.header | 0x02) + chr((self.housecode() << 4) | self.functions[self.function])
+
+class x10_connection:
+    def __init__(self, device):
+        self.tty = serial.Serial(device, 4800, timeout=2)
+        
+        # set the time (prevents power loss time reset poll)
+        poll = self.tty.read()
+        if poll != "":
+            poll = ord(poll)
+            if poll == 0x5a:
+                print "sending poll response"
+                self.tty.write('\xc3')
+            if poll == 0xa5:
+                print "setting clock"
+                self.tty.write('\x9b\x00\x00\x00\x00\x00\x00')
+
+    def transmit(self, message):
+        check = 0
+        for c in str(message):
+            check += ord(c)
+        check &= 0xff
+        failcount = 0
+        while 1:
+            self.tty.write(str(message))
+            try:
+                if ord(self.tty.read()) == check:
+                    self.tty.write('\x00')
+                    if ord(self.tty.read()) == 0x55:
+                        break
+            except TypeError, e: 
+                # in case read() doesn't provide ord() with a value
+                pass
+
+            failcount += 1
+            if failcount == 5:
+                raise x10_exception('x10 transmission failed')
+
+    def close(self):
+        self.tty.close()
+
+def main(args):
+    tty = '/dev/ttyS0'
+    try:
+        opts, pargs = getopt.getopt(args, 't:')
+        for pair in opts:
+            if pair[0] == '-t':
+                tty = pair[1]
+    except (getopt.error), e:
+        print "Usage: sys.argv[0] [-t tty] command-spec"
+        print "       command-spec example: a1 on"
+        sys.exit(1)
+
+    connection = x10_connection(tty)
+    while len(pargs) >= 2:
+        house = pargs[0][0:1]
+        device = pargs[0][1:]
+        function = pargs[1]
+        try:
+            connection.transmit(x10_address_message(house, device))
+            connection.transmit(x10_function_message(house, function))
+            pargs=pargs[2:]
+        except (ValueError), e:
+            sys.stderr.write("Failed to decode %s %s\n"%(pargs[0],pargs[1]))
+            pargs=pargs[1:]
+
+    connection.close()
+    return 0
+    
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))
+

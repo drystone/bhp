@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<controls>
+  <control type="x10" id="h1">
+    <state thermostat-id="sitting_room"/>
+  </control>
+  <control type="x10" id="h2">
+    <state thermostat-id="kitchen"/>
+  </control>
+  <control type="x10" id="h3">
+    <state thermostat-id="so_bedroom"/>
+  </control>
+  <control type="x10" id="h4">
+    <state thermostat-id="ja_bedroom"/>
+  </control>
+  <!-- central heating pump + zone valve -->
+  <control type="x10" id="b1">
+    <or>
+      <state thermostat-id="sitting_room"/>
+      <state thermostat-id="bathroom"/>
+      <state thermostat-id="so_bedroom"/>
+      <state thermostat-id="kitchen"/>
+      <state thermostat-id="ja_bedroom"/>
+      <!--state stat-id="hallway"/>
+      <state stat-id="landing"/-->
+    </or>
+  </control>
+  <!-- boiler pump + boiler -->
+  <!-- control type="x10" id="b2">
+    <state thermostat-id="boiler"/>
+  </control -->
+</controls>
+

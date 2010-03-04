@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<routines>
+  <daily-routine id="work" name="Work">
+    <timer zone-id="sitting_room" start="PT06H45M" end="PT07H40M" climate-id="cool"/>
+    <timer zone-id="sitting_room" start="PT15H30M" end="PT19H30M" climate-id="cool"/>
+    <timer zone-id="sitting_room" start="PT19H30M" end="PT22H" climate-id="warm"/>
+    <timer zone-id="kitchen" start="PT05H30M" end="PT07H30M" climate-id="warm"/>
+    <timer zone-id="kitchen" start="PT15H30M" end="PT20H" climate-id="warm"/>
+    <timer zone-id="bathroom" start="PT05H15M" end="PT06H30M" climate-id="hot"/>
+    <timer zone-id="bathroom" start="PT06H30M" end="PT07H" climate-id="warm"/>
+    <timer zone-id="bathroom" start="PT20H" end="PT22H" climate-id="warm"/>
+    <timer zone-id="ja_bedroom" start="PT06H" end="PT06H30M" climate-id="warm"/>
+    <timer zone-id="ja_bedroom" start="PT22H" end="PT23H" climate-id="cool"/>
+    <timer zone-id="so_bedroom" start="PT06H30M" end="PT07H" climate-id="warm"/>
+    <timer zone-id="so_bedroom" start="PT20H00M" end="PT21H30M" climate-id="warm"/>
+  </daily-routine>
+  <daily-routine id="home" name="Home">
+    <timer zone-id="sitting_room" start="PT15H" end="PT24H" climate-id="cool"/>
+    <timer zone-id="kitchen" start="PT07H" end="PT20H" climate-id="cool"/>
+    <timer zone-id="kitchen" start="PT09H" end="PT11H" climate-id="warm"/>
+    <timer zone-id="bathroom" start="PT08H" end="PT10H" climate-id="warm"/>
+    <timer zone-id="bathroom" start="PT20H" end="PT23H" climate-id="warm"/>
+    <timer zone-id="ja_bedroom" start="PT07H30M" end="PT09H" climate-id="warm"/>
+    <timer zone-id="ja_bedroom" start="PT22H30M" end="PT23H30M" climate-id="cool"/>
+    <timer zone-id="so_bedroom" start="PT08H" end="PT10H" climate-id="warm"/>
+    <timer zone-id="so_bedroom" start="PT20H30M" end="PT22H" climate-id="warm"/>
+  </daily-routine>
+  <daily-routine id="away" name="Away">
+    <timer zone-id="bathroom" start="PT00H" end="PT00H" climate-id="cold"/>
+  </daily-routine>
+  <weekly-routines>
+    <weekly-routine routine-id="work" start="PT18H" end="P5DT16H"/>
+    <weekly-routine routine-id="home" start="P5DT16H" end="PT18H"/>
+  </weekly-routines>
+  <special-routines>
+    <special-routine routine-id="home" start="2010-02-12T08:00:00" end="2010-02-12T14:00:00"/>
+    <special-routine routine-id="away" start="2010-02-12T14:00:00" end="2010-02-19T12:00:00"/>
+  </special-routines>
+  <overrides>
+    <override zone-id="sitting_room" end="2010-02-21T17:00:00" climate-id="warm"/>
+    <override zone-id="so_bedroom" end="2010-02-12T09:00:00" climate-id="warm"/>
+    <override zone-id="kitchen" end="2010-03-01T11:00:00" climate-id="warm"/>
+  </overrides>
+</routines>
+

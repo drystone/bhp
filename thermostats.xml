@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<thermostats>
+  <thermostat name="Sitting Room" id="sitting_room" thermometer-id="sitting_room" zone-id="sitting_room"/>
+  <thermostat name="Bathroom" id="bathroom" thermometer-id="bathroom" zone-id="bathroom"/>
+  <thermostat name="Kitchen" id="kitchen" thermometer-id="kitchen" zone-id="kitchen"/>
+  <thermostat name="John and Alex" id="ja_bedroom" thermometer-id="ja_bedroom" zone-id="ja_bedroom"/>
+  <thermostat name="Sam and Oliver" id="so_bedroom" thermometer-id="so_bedroom" zone-id="so_bedroom"/>
+  <!--roomstat id="landing" thermometer-id="sitting_room" zone-id="passageway"/>
+  <roomstat id="hallway" thermometer-id="sitting_room" zone-id="passageway"/>
+  <dualstat id="boiler" high-thermometer-id="tank-top" low-thermometer-id="tank-high" low-temperature="45" high-temperature="65"/-->
+</thermostats>
+
