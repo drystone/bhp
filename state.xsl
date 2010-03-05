@@ -25,7 +25,7 @@ bhp. If not, see [http://www.gnu.org/licenses/].
 
   <xsl:variable name="temperatures" select="document('temperatures.xml')/temperatures"/>
   <xsl:variable name="targets" select="document('targets.xml')/targets"/>
-  <xsl:variable name="old-states" select="document('state.xml')/themostat-states"/>
+  <xsl:variable name="old-states" select="document('state.xml')/thermostat-states"/>
 
   <xsl:template match="thermostats">
     <thermostat-states>
