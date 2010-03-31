@@ -25,6 +25,9 @@ bhp. If not, see [http://www.gnu.org/licenses/].
   <xsl:variable name="climates" select="document('climates.xml')/climates"/>
   <xsl:variable name="routines" select="document('routines.xml')/routines"/>
 
+  <!-- get current time and strip off zone info -->
+  <xsl:variable name="now" select="substring-before(concat(date:date-time(),'+'),'+')"/>
+
   <xsl:template match="/zones">
     <targets>
       <xsl:apply-templates select="zone"/>
@@ -43,14 +46,14 @@ bhp. If not, see [http://www.gnu.org/licenses/].
     <xsl:param name="zone"/>
 
     <!-- is there override temperature -->
-    <xsl:variable name="override" select="$routines/overrides/override[@zone-id=$zone/@id][date:seconds(@end) > date:seconds()]"/>
+    <xsl:variable name="override" select="$routines/overrides/override[@zone-id=$zone/@id][date:seconds(@end) > date:seconds($now)]"/>
     <xsl:choose>
       <xsl:when test="$override">
         <xsl:value-of select="$climates/climate[@id=$override[position()=last()]/@climate-id]/@temperature"/>
       </xsl:when>
       <xsl:otherwise>
         <!-- are we in a special routine? -->
-        <xsl:variable name="special-routine" select="$routines/special-routines/special-routine[date:seconds() >= date:seconds(@start)][date:seconds(@end) > date:seconds()]"/>
+        <xsl:variable name="special-routine" select="$routines/special-routines/special-routine[date:seconds($now) >= date:seconds(@start)][date:seconds(@end) > date:seconds($now)]"/>
         <xsl:choose>
           <xsl:when test="$special-routine">
             <xsl:apply-templates select="$routines/daily-routine[@id=$special-routine[position()=last()]/@routine-id]">
@@ -59,7 +62,7 @@ bhp. If not, see [http://www.gnu.org/licenses/].
           </xsl:when>
           <xsl:otherwise>
             <!-- are we in a weekly routine? -->
-            <xsl:variable name="now" select="date:seconds()-date:seconds(date:date())+(date:day-in-week()-1)*24*60*60"/>
+            <xsl:variable name="now" select="date:seconds($now)-date:seconds(date:date($now))+(date:day-in-week($now)-1)*24*60*60"/>
             <xsl:variable name="weekly-routine" select="$routines/weekly-routines/weekly-routine[($now >= date:seconds(@start) and date:seconds(@end) > $now) or ( date:seconds(@start) >= date:seconds(@end) and ( $now >= date:seconds(@start) or date:seconds(@end) > $now))]"/>
             <xsl:choose>
               <xsl:when test="$weekly-routine">
@@ -88,7 +91,7 @@ bhp. If not, see [http://www.gnu.org/licenses/].
 
   <xsl:template match="daily-routine">
     <xsl:param name="zone"/>
-    <xsl:variable name="now" select="date:seconds()-date:seconds(date:date())"/>
+    <xsl:variable name="now" select="date:seconds($now)-date:seconds(date:date($now))"/>
     <xsl:variable name="timer" select="timer[@zone-id=$zone/@id][($now >= date:seconds(@start) and date:seconds(@end) > $now) or ( date:seconds(@start) >= date:seconds(@end) and ($now >= date:seconds(@start) or date:seconds(@end) > $now))]"/>
     <xsl:choose>
       <xsl:when test="$timer">
