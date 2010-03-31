@@ -18,9 +18,11 @@
 
 cd `dirname $0`
 
-./bhpread >.temperatures.xml && mv .temperatures.xml temperatures.xml
+./bhpread >.temperatures.xml
+mv .temperatures.xml temperatures.xml
 xsltproc targets.xsl zones.xml >targets.xml
-xsltproc state.xsl thermostats.xml >.state.xml && mv .state.xml state.xml
+xsltproc state.xsl thermostats.xml >.state.xml
+mv .state.xml state.xml
 ./bhpx10 -t /dev/ttyS1 `xsltproc --stringparam control-type x10 control.xsl controls.xml`
 ./bhpfs20 `xsltproc --stringparam control-type fs20 control.xsl controls.xml`
 
