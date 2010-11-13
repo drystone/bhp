@@ -40,7 +40,7 @@ def application(environ, start_response):
         <option value="3600">1 hour</option>
         <option value="7200">2 hours</option>
       </select>
-      <button>Pimp My Heat</button>
+      <input type="submit" name="pimp" value="Pimp My Heat" />
     </form>
   </body>
 </html>""" % (zone_options, climate_options)
