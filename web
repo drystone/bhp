@@ -1,0 +1,67 @@
+#!/usr/bin/python
+
+from lxml import etree
+import cgi
+import sys
+import time
+
+def application(environ, start_response):
+    path = environ['PATH_INFO']
+
+    if path == '/':
+        start_response("302 Found", [('Content-Type', 'text/html'), ('Location','/index.html')])
+        return ''
+    
+    if path == '/index.html':
+        zone_tree = etree.parse('zones.xml')
+        zone_options = ''
+        for zone in zone_tree.xpath('/zones/zone'):
+            zone_options += '<option value="' + zone.get('id') + '">' + zone.get('name') + '</option>'
+        climate_tree = etree.parse('climates.xml')
+        climate_options = ''
+        for climate in climate_tree.xpath('/climates/climate'):
+            climate_options += '<option value="' + climate.get('id') + '">' + climate.get('name') + '</option>'
+        start_response("200 Found", [('Content-Type', 'text/html')])
+        return """<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pimp My Heat</title>
+  </head>
+  <body>
+    <form method='POST' action='pimp.html'>
+      <select name="zone">
+        %s
+      </select>
+      <select name="climate">
+        %s
+      </select>
+      <select name="duration">
+        <option value="1800">30 minutes</option>
+        <option value="3600">1 hour</option>
+        <option value="7200">2 hours</option>
+      </select>
+      <button>Pimp My Heat</button>
+    </form>
+  </body>
+</html>""" % (zone_options, climate_options)
+
+    if path == '/pimp.html':
+        fs = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+        routines_tree = etree.parse('routines.xml')
+        overrides = routines_tree.xpath('/routines/overrides')[0]
+        override = etree.Element('override')
+        override.set('zone-id', fs.getfirst('zone'))
+        override.set('climate-id', fs.getfirst('climate'))
+        override.set('end', time.strftime('%Y-%m-%dT%H:%M:00', time.localtime(time.time() + int(fs.getfirst('duration')))))
+        overrides.append(override)
+        f = open('routines.xml', 'w')
+        f.write(etree.tostring(routines_tree, pretty_print=True, xml_declaration=True))
+        f.close()
+        start_response("302 Found", [('Content-Type', 'text/html'), ('Location','/index.html')])
+        return ''
+
+if __name__ == "__main__":
+    from wsgiref.simple_server import make_server
+    make_server('', 80, application).serve_forever()
+
+
