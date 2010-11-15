@@ -26,7 +26,7 @@ while parg < len(sys.argv):
     device=sys.argv[parg]
     state=sys.argv[parg+1]
     if state=="on":
-      tty.write("Tabcd%s26ff\n" % (device))
+      tty.write("T%s0126ff\n" % (device))
     else:
-      tty.write("Tabcd%s2600\n" % (device))
+      tty.write("T%s012600\n" % (device))
     parg=parg+2
