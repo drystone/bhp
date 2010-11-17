@@ -22,28 +22,35 @@ bhp. If not, see [http://www.gnu.org/licenses/].
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 	<xsl:output method="xml" indent="yes"/>
+  <xsl:variable name="new" select="/temperatures"/>
+  <xsl:variable name="old" select="document('temperatures.xml')/temperatures"/>
+  <xsl:variable name="thermometers" select="document('thermometers.xml')/thermometers"/>
 
-	<xsl:template match="temperatures">
-		<temperatures>
-			<xsl:apply-templates select="temperature"/>
-		</temperatures>
-	</xsl:template>
-
-	<xsl:template match="temperature">
-		<xsl:variable name="thermometer" select="document('thermometers.xml')/thermometers/thermometer[@onewire-id=current()/@onewire-id]"/>
-		<temperature onewire-id="{@onewire-id}">
-			<xsl:if test="$thermometer/@id">
-				<xsl:attribute name="thermometer-id"><xsl:value-of select="$thermometer/@id"/></xsl:attribute>
-			</xsl:if>
-			<xsl:choose>
-				<xsl:when test="$thermometer/@correction">
-					<xsl:value-of select=".+$thermometer/@correction"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="."/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</temperature>
-	</xsl:template>
+  <xsl:template match="/">
+    <temperatures>
+      <xsl:apply-templates select="$thermometers/thermometer"/>
+    </temperatures>
+  </xsl:template>
+  
+  <xsl:template match="thermometer">
+		<temperature onewire-id="{@onewire-id}" thermometer-id="{@id}">
+      <xsl:variable name="temperature" select="$new/temperature[@onewire-id=current()/@onewire-id]"/>
+      <xsl:choose>
+        <xsl:when test="count($temperature)">
+          <xsl:choose>
+            <xsl:when test="@correction">
+              <xsl:value-of select="$temperature + @correction"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$temperature"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$old/temperature[@onewire-id=current()/@onewire-id]"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </temperature>
+  </xsl:template>
 
 </xsl:stylesheet>
