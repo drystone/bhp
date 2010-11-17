@@ -26,8 +26,8 @@
     </or>
   </control>
   <!-- boiler pump + boiler -->
-  <!-- control type="x10" id="b2">
+  <control type="x10" id="b2">
     <state thermostat-id="boiler"/>
-  </control -->
+  </control>
 </controls>
 

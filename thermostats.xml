@@ -7,7 +7,7 @@
   <thermostat name="John and Alex" id="ja_bedroom" thermometer-id="ja_bedroom" zone-id="ja_bedroom"/>
   <thermostat name="Sam and Oliver" id="so_bedroom" thermometer-id="so_bedroom" zone-id="so_bedroom"/>
   <!--roomstat id="landing" thermometer-id="sitting_room" zone-id="passageway"/>
-  <roomstat id="hallway" thermometer-id="sitting_room" zone-id="passageway"/>
-  <dualstat id="boiler" high-thermometer-id="tank-top" low-thermometer-id="tank-high" low-temperature="45" high-temperature="65"/-->
+  <roomstat id="hallway" thermometer-id="sitting_room" zone-id="passageway"/-->
+  <dualstat name="Boiler" id="boiler" high-thermometer-id="tank_top" low-thermometer-id="tank_middle" low-temperature="60" high-temperature="60"/>
 </thermostats>
 

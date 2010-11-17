@@ -2,8 +2,11 @@
 <thermometers>
 	<thermometer onewire-id="10456CCB01080025" id="sitting_room" name="Sitting Room" correction="-0.6"/>
 	<thermometer onewire-id="104570CB01080078" id="so_bedroom" name="Sam and Oliver" correction="1.5"/>
-	<thermometer onewire-id="106F5DCB01080015" id="kitchen" name="Kitchen" correction="0.5"/>
-	<thermometer onewire-id="288B243C020000FE" id="bathroom" name="Bathroom" correction="0"/>
+	<thermometer onewire-id="106F5DCB01080015" id="bathroom" name="Bathroom" correction="0.5"/>
+	<thermometer onewire-id="288B243C020000FE" id="kitchen" name="Kitchen" correction="0"/>
 	<thermometer onewire-id="289D433C02000057" id="ja_bedroom" name="John and Alex" correction="0"/>
+  <thermometer onewire-id="28F05E3C0200004E" id="tank_middle" name="Tank Middle" correction="0"/>
+  <thermometer onewire-id="28A23B3C020000CD" id="tank_bottom" name="Tank Bottom" correction="0"/>
+  <thermometer onewire-id="2846393C020000BB" id="tank_top" name="Tank Top" correction="0"/>
 </thermometers>
 

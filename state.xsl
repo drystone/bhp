@@ -25,7 +25,7 @@ bhp. If not, see [http://www.gnu.org/licenses/].
 
   <xsl:variable name="temperatures" select="document('temperatures.xml')/temperatures"/>
   <xsl:variable name="targets" select="document('targets.xml')/targets"/>
-  <xsl:variable name="old-states" select="document('state.xml')/thermostat-states"/>
+  <xsl:variable name="old" select="document('state.xml')/thermostat-states/thermostat-state"/>
 
   <xsl:template match="thermostats">
     <thermostat-states>
@@ -37,7 +37,7 @@ bhp. If not, see [http://www.gnu.org/licenses/].
     <thermostat-state thermostat-id="{@id}">
       <xsl:choose>
         <xsl:when test="count($temperatures/temperature[@thermometer-id=current()/@thermometer-id])=0">
-          <xsl:value-of select="$old-states/thermostat-state[@thermostat-id=current()/@id]"/>
+          <xsl:value-of select="$old/thermostat-state[@thermostat-id=current()/@id]"/>
         </xsl:when>
         <xsl:when test="$targets/target[@zone-id=current()/@zone-id] >= $temperatures/temperature[@thermometer-id=current()/@thermometer-id]">on</xsl:when>
         <xsl:otherwise>off</xsl:otherwise>
@@ -45,17 +45,16 @@ bhp. If not, see [http://www.gnu.org/licenses/].
     </thermostat-state>
   </xsl:template>
 
-  <!--xsl:template match="dualstat">
-    <stat-state stat-id="{@id}">
+  <xsl:template match="dualstat">
+    <thermostat-state thermostat-id="{@id}">
       <xsl:choose>
         <xsl:when test="$temperatures/temperature[@thermometer-id=current()/@low-thermometer-id] > @high-temperature">off</xsl:when>
         <xsl:when test="@low-temperature >= $temperatures/temperature[@thermometer-id=current()/@high-thermometer-id]">on</xsl:when>
-        <xsl:when test="$old-states/states/state[@stat-id=current/@id]">
-          <xsl:value-of select="$old-states/states/state[@stat-id=current/@id]"/>
-        </xsl:when>
+        <xsl:when test="$old[@thermostat-id=current()/@id]"><xsl:value-of select="$old[@thermostat-id=current()/@id]"/></xsl:when>
+        <xsl:otherwise>off</xsl:otherwise>
       </xsl:choose>
-    </stat-state>
-  </xsl:template-->
+    </thermostat-state>
+  </xsl:template>
 
 </xsl:stylesheet>
 
