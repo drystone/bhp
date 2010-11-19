@@ -1,7 +1,7 @@
-<?xml version='1.0' encoding='ASCII'?>
+<?xml version='1.0' encoding='utf-8'?>
 <routines>
   <daily-routine id="work" name="Work">
-    <timer zone-id="sitting_room" start="PT07H" end="PT07H30M" climate-id="cool"/>
+    <!--timer zone-id="sitting_room" start="PT07H" end="PT07H30M" climate-id="cool"/-->
     <timer zone-id="sitting_room" start="PT15H30M" end="PT22H" climate-id="cool"/>
     <timer zone-id="kitchen" start="PT05H30M" end="PT07H30M" climate-id="warm"/>
     <timer zone-id="kitchen" start="PT15H30M" end="PT20H" climate-id="warm"/>
@@ -9,7 +9,7 @@
     <timer zone-id="bathroom" start="PT06H" end="PT07H" climate-id="warm"/>
     <timer zone-id="bathroom" start="PT18H" end="PT19H" climate-id="hot"/>
     <timer zone-id="bathroom" start="PT20H" end="PT22H" climate-id="warm"/>
-    <timer zone-id="ja_bedroom" start="PT06H" end="PT06H30M" climate-id="cool"/>
+    <timer zone-id="ja_bedroom" start="PT05H30M" end="PT06H30M" climate-id="cool"/>
     <timer zone-id="ja_bedroom" start="PT21H30M" end="PT22H30M" climate-id="cool"/>
     <timer zone-id="so_bedroom" start="PT06H30M" end="PT07H" climate-id="warm"/>
     <timer zone-id="so_bedroom" start="PT20H30M" end="PT22H" climate-id="cool"/>
