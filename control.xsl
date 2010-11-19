@@ -21,19 +21,20 @@ bhp. If not, see [http://www.gnu.org/licenses/].
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:output method="text"/>
+  <xsl:output method="xml" indent="yes"/>
 
-  <xsl:param name="control-type"/>
+  <xsl:variable name="old" select="document('control-state.xml')/control-states/control-state"/>
 
   <xsl:template match="controls">
-    <xsl:apply-templates select="control[@type=$control-type]"/>
+    <control-states>
+      <xsl:apply-templates select="control"/>
+    </control-states>
   </xsl:template>
 
   <xsl:template match="control">
-    <xsl:variable name="result">
+    <control-state id="{@id}" type="{@type}" device-code="{@device-code}" last-state="{$old[@id=current()/@id]}">
       <xsl:apply-templates select="*"/>
-    </xsl:variable>
-    <xsl:value-of select="concat(' ',@id, ' ', $result)"/>
+    </control-state>
   </xsl:template>
 
   <xsl:template match="state">

@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 
 <controls>
-  <control type="fs20" id="1334">
+  <control id="sitting_room_rad" type="fs20" device-code="1334">
     <state thermostat-id="sitting_room"/>
   </control>
-  <control type="fs20" id="1234">
+  <control id="kitchen_rad" type="fs20" device-code="1234">
     <state thermostat-id="kitchen"/>
   </control>
-  <control type="fs20" id="1534">
+  <control id="so_bedroom_rad" type="fs20" device-code="1534">
     <state thermostat-id="so_bedroom"/>
   </control>
-  <control type="fs20" id="1434">
+  <control id="ja_bedroom_rad" type="fs20" device-code="1434">
     <state thermostat-id="ja_bedroom"/>
   </control>
   <!-- central heating pump + zone valve -->
-  <control type="x10" id="b1">
+  <control id="central_heating" type="x10" device-code="b1">
     <or>
       <state thermostat-id="sitting_room"/>
       <state thermostat-id="bathroom"/>
@@ -26,7 +26,7 @@
     </or>
   </control>
   <!-- boiler pump + boiler -->
-  <control type="x10" id="b2">
+  <control id="boiler" type="x10" device-code="b2">
     <state thermostat-id="boiler"/>
   </control>
 </controls>
