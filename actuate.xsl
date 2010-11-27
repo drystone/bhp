@@ -30,7 +30,7 @@ bhp. If not, see [http://www.gnu.org/licenses/].
 
   <xsl:template match="/">
     <xsl:call-template name="make-command">
-      <xsl:with-param name="command" select="'./bhpx10 -t /dev/ttyS1'"/>
+      <xsl:with-param name="command" select="'./bhpx10 -t /dev/ttyUSB0'"/>
       <xsl:with-param name="type" select="'x10'"/>
     </xsl:call-template>
     <xsl:call-template name="make-command">
