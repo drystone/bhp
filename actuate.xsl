@@ -34,7 +34,7 @@ bhp. If not, see [http://www.gnu.org/licenses/].
       <xsl:with-param name="type" select="'x10'"/>
     </xsl:call-template>
     <xsl:call-template name="make-command">
-      <xsl:with-param name="command" select="'ssh leaf bhp/bhpfs20'"/>
+      <xsl:with-param name="command" select="'./bhpfs20'"/>
       <xsl:with-param name="type" select="'fs20'"/>
     </xsl:call-template>
     <xsl:call-template name="make-command">
