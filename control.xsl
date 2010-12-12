@@ -23,7 +23,7 @@ bhp. If not, see [http://www.gnu.org/licenses/].
 
   <xsl:output method="xml" indent="yes"/>
 
-  <xsl:variable name="old" select="document('control-state.xml')/control-states/control-state"/>
+  <xsl:variable name="old" select="document('/tmp/control-state.xml')/control-states/control-state"/>
 
   <xsl:template match="controls">
     <control-states>
@@ -38,7 +38,7 @@ bhp. If not, see [http://www.gnu.org/licenses/].
   </xsl:template>
 
   <xsl:template match="state">
-    <xsl:value-of select="document('state.xml')/thermostat-states/thermostat-state[@thermostat-id=current()/@thermostat-id]"/>
+    <xsl:value-of select="document('/tmp/state.xml')/thermostat-states/thermostat-state[@thermostat-id=current()/@thermostat-id]"/>
   </xsl:template>
 
   <xsl:template match="or">

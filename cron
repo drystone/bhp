@@ -18,10 +18,10 @@
 
 cd `dirname $0`
 
-./bhpread >.tmp && mv .tmp temperatures.xml
-xsltproc targets.xsl zones.xml >targets.xml
-xsltproc state.xsl thermostats.xml >.tmp && mv .tmp state.xml
-xsltproc control.xsl controls.xml >.tmp && mv .tmp control-state.xml
-xsltproc actuate.xsl control-state.xml 2>/dev/null | /bin/sh
+./bhpread >/tmp/.tmp && mv /tmp/.tmp /tmp/temperatures.xml
+xsltproc targets.xsl zones.xml >/tmp/targets.xml
+xsltproc state.xsl thermostats.xml >/tmp/.tmp && mv /tmp/.tmp /tmp/state.xml
+xsltproc control.xsl controls.xml >/tmp/.tmp && mv /tmp/.tmp /tmp/control-state.xml
+xsltproc actuate.xsl /tmp/control-state.xml 2>/dev/null | /bin/sh
 #xsltproc actuate.xsl control-state.xml | /bin/sh
 
