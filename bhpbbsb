@@ -1,0 +1,32 @@
+#!/usr/bin/python
+
+# Copyright 2010 John Hedges
+#
+# This file is part of bhp.
+#
+# bhp is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# bhp is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# bhp. If not, see <http://www.gnu.org/licenses/>.
+
+import sys
+import subprocess
+import time
+
+for i in range(3):
+    parg=1
+    while parg < len(sys.argv):
+        device = sys.argv[parg]
+        state = 0
+        if sys.argv[parg + 1] == 'on':
+            state = 1
+        subprocess.call(['/usr/bin/wget', '-q', 'http://domia/4?3=%s%s' % (state, device)])
+	parg = parg + 2
+    time.sleep(2)
