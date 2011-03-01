@@ -34,5 +34,5 @@
   </special-routines>
   <overrides>
     <!--override zone-id="bathroom" end="2010-09-26T18:00:00" climate-id="on"/-->
-<override zone-id="kitchen" climate-id="warm" end="2010-11-27T19:13:00"/></overrides>
+  </overrides>
 </routines>
