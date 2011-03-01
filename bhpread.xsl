@@ -23,7 +23,7 @@ bhp. If not, see [http://www.gnu.org/licenses/].
 
 	<xsl:output method="xml" indent="yes"/>
   <xsl:variable name="new" select="/temperatures"/>
-  <xsl:variable name="old" select="document('temperatures.xml')/temperatures"/>
+  <xsl:variable name="old" select="document('/tmp/temperatures.xml')/temperatures"/>
   <xsl:variable name="thermometers" select="document('thermometers.xml')/thermometers"/>
 
   <xsl:template match="/">
