@@ -5,7 +5,8 @@
     <timer zone-id="sitting_room" start="PT15H30M" end="PT22H" climate-id="cool"/>
     <timer zone-id="kitchen" start="PT05H30M" end="PT07H30M" climate-id="warm"/>
     <timer zone-id="kitchen" start="PT15H30M" end="PT20H" climate-id="warm"/>
-    <timer zone-id="bathroom" start="PT05H" end="PT07H" climate-id="warm"/>
+    <timer zone-id="bathroom" start="PT05H" end="PT05H45M" climate-id="warm"/>
+    <timer zone-id="bathroom" start="PT05H45M" end="PT06H45M" climate-id="on"/>
     <timer zone-id="bathroom" start="PT18H" end="PT22H" climate-id="warm"/>
     <timer zone-id="ja_bedroom" start="PT05H30M" end="PT06H30M" climate-id="cool"/>
     <timer zone-id="ja_bedroom" start="PT21H30M" end="PT22H30M" climate-id="cool"/>
@@ -34,5 +35,5 @@
   </special-routines>
   <overrides>
     <!--override zone-id="bathroom" end="2010-09-26T18:00:00" climate-id="on"/-->
-  </overrides>
+</overrides>
 </routines>
