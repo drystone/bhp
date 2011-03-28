@@ -13,21 +13,26 @@
   <control id="ja_bedroom_rad" type="bbsb" device-code="a01">
     <state thermostat-id="ja_bedroom"/>
   </control>
+  <control id="bathroom_rad" type="udin" device-code="4">
+    <state thermostat-id="bathroom"/>
+  </control>
   <!-- central heating pump + zone valve -->
-  <control id="central_heating" type="x10" device-code="b1">
+  <control id="central_heating" type="udin" device-code="2">
     <or>
       <state thermostat-id="sitting_room"/>
       <state thermostat-id="bathroom"/>
       <state thermostat-id="so_bedroom"/>
       <state thermostat-id="kitchen"/>
       <state thermostat-id="ja_bedroom"/>
-      <!--state stat-id="hallway"/>
-      <state stat-id="landing"/-->
+      <state thermostat-id="dhw"/>
     </or>
   </control>
   <!-- boiler pump + boiler -->
-  <control id="boiler" type="x10" device-code="b2">
+  <control id="boiler" type="udin" device-code="1">
     <state thermostat-id="boiler"/>
+  </control>
+  <control id="dhw" type="udin" device-code="3">
+    <state thermostat-id="dhw"/>
   </control>
 </controls>
 
