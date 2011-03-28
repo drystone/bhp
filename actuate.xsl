@@ -41,6 +41,10 @@ bhp. If not, see [http://www.gnu.org/licenses/].
       <xsl:with-param name="command" select="'./bhpbbsb'"/>
       <xsl:with-param name="type" select="'bbsb'"/>
     </xsl:call-template>
+    <xsl:call-template name="make-command">
+      <xsl:with-param name="command" select="'./bhpudin'"/>
+      <xsl:with-param name="type" select="'udin'"/>
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template name="make-command">
