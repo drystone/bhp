@@ -17,16 +17,8 @@
 # bhp. If not, see <http://www.gnu.org/licenses/>.
 
 import sys, serial
-from types import StringTypes
 
-tty = serial.Serial("/dev/ttyUSB0", timeout=1)
+tty = serial.Serial("/dev/ttyUSB0")
 
-parg=1
-while parg < len(sys.argv):
-    device=sys.argv[parg]
-    state=sys.argv[parg+1]
-    if state=="on":
-      tty.write("n%s\r" % (device))
-    else:
-      tty.write("f%s\r" % (device))
-    parg=parg+2
+for device, state in zip(sys.argv[1::2], sys.argv[2::2]):
+    tty.write(('n' if state == "on" else 'f') + device + '\r')
