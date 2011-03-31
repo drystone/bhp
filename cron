@@ -16,12 +16,22 @@
 # You should have received a copy of the GNU General Public License along with
 # bhp. If not, see <http://www.gnu.org/licenses/>.
 
-cd `dirname $0`
+TMPDIR=/tmp
+TMP=$TMPDIR/.tmp
+TEMPERATURES=$TMPDIR/temperatures.xml
+STATE=$TMPDIR/state.xml
+CSTATE=$TMPDIR/control-state.xml
 
-./bhpread >/tmp/.tmp && mv /tmp/.tmp /tmp/temperatures.xml
-xsltproc targets.xsl zones.xml >/tmp/targets.xml
-xsltproc state.xsl thermostats.xml >/tmp/.tmp && mv /tmp/.tmp /tmp/state.xml
-xsltproc control.xsl controls.xml >/tmp/.tmp && mv /tmp/.tmp /tmp/control-state.xml
-xsltproc actuate.xsl /tmp/control-state.xml 2>/dev/null | /bin/sh
-#xsltproc actuate.xsl control-state.xml | /bin/sh
+for file in $TEMPERATURES $STATE $CSTATE; do
+  if [ ! -e $file ]; then
+    echo '<?xml version="1.0"?><empty/>' > $file
+  fi
+done
+
+cd `dirname $0`
+./bhpread >$TMP && mv $TMP $TEMPERATURES
+xsltproc targets.xsl zones.xml >$TMPDIR/targets.xml
+xsltproc state.xsl thermostats.xml >$TMP && mv $TMP $STATE
+xsltproc control.xsl controls.xml >$TMP && mv $TMP $CSTATE
+xsltproc actuate.xsl $CSTATE 2>/dev/null | /bin/sh
 
