@@ -35,3 +35,12 @@ xsltproc state.xsl thermostats.xml >$TMP && mv $TMP $STATE
 xsltproc control.xsl controls.xml >$TMP && mv $TMP $CSTATE
 xsltproc actuate.xsl $CSTATE 2>/dev/null | /bin/sh
 
+tanktemp=$(xmlstarlet sel -t -c "//*[@thermometer-id='tank_bottom']/text()" <$TEMPERATURES)
+paneltemp=$(xmlstarlet sel -t -c "//*[@thermometer-id='solar']/text()" <$TEMPERATURES)
+if [ $(echo "scale=3; $paneltemp > 90 || $paneltemp > $tanktemp + 15" | bc) -eq 1 ]; then
+  ./bhpudin 5 on
+  echo solar pump on
+else
+  ./bhpudin 5 off
+fi
+

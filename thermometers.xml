@@ -9,5 +9,6 @@
   <thermometer onewire-id="28A23B3C020000CD" id="tank_bottom" name="Tank Bottom"/>
   <thermometer onewire-id="2846393C020000BB" id="tank_top" name="Tank Top"/>
   <thermometer onewire-id="280F81240200000D" id="dhw" name="DHW"/>
+  <thermometer onewire-id="10DDA61302080053" id="solar" name="Solar Panel"/>
 </thermometers>
 
