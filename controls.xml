@@ -14,7 +14,10 @@
     <state thermostat-id="ja_bedroom"/>
   </control>
   <control id="bathroom_rad" type="udin" device-code="4">
-    <state thermostat-id="bathroom"/>
+    <or>
+      <state thermostat-id="bathroom"/>
+      <state thermostat-id="dump"/>
+    </or>
   </control>
   <!-- central heating pump + zone valve -->
   <control id="central_heating" type="udin" device-code="2">
@@ -25,6 +28,7 @@
       <state thermostat-id="kitchen"/>
       <state thermostat-id="ja_bedroom"/>
       <state thermostat-id="dhw"/>
+      <state thermostat-id="dump"/>
     </or>
   </control>
   <!-- boiler pump + boiler -->
@@ -33,6 +37,9 @@
   </control>
   <control id="dhw" type="udin" device-code="3">
     <state thermostat-id="dhw"/>
+  </control>
+  <control id="solar" type="udin" device-code="5">
+    <state thermostat-id="solar"/>
   </control>
 </controls>
 
