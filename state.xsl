@@ -34,13 +34,35 @@ bhp. If not, see [http://www.gnu.org/licenses/].
   </xsl:template>
 
   <xsl:template match="thermostat">
+    <xsl:variable name="temperature">
+      <xsl:choose>
+        <xsl:when test="count(@offset)">
+          <xsl:value-of select="@offset + $temperatures/temperature[@thermometer-id=current()/@thermometer-id]"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$temperatures/temperature[@thermometer-id=current()/@thermometer-id]"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="state">
+      <xsl:choose>
+        <xsl:when test="count(@zone-id) and $targets/target[@zone-id=current()/@zone-id] >= $temperature">on</xsl:when>
+        <xsl:when test="count(@temperature) and @temperature >= $temperature">on</xsl:when>
+        <xsl:when test="count(@target-thermometer-id) and $temperatures/temperature[@thermometer-id=current()/@target-thermometer-id] >= $temperature">on</xsl:when>
+        <xsl:otherwise>off</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <thermostat-state thermostat-id="{@id}">
       <xsl:choose>
-        <xsl:when test="count($temperatures/temperature[@thermometer-id=current()/@thermometer-id])=0">
-          <xsl:value-of select="$old/thermostat-state[@thermostat-id=current()/@id]"/>
+        <xsl:when test="@inverse='yes'">
+          <xsl:choose>
+            <xsl:when test="$state='on'">off</xsl:when>
+            <xsl:otherwise>on</xsl:otherwise>
+          </xsl:choose>
         </xsl:when>
-        <xsl:when test="$targets/target[@zone-id=current()/@zone-id] >= $temperatures/temperature[@thermometer-id=current()/@thermometer-id]">on</xsl:when>
-        <xsl:otherwise>off</xsl:otherwise>
+        <xsl:otherwise>
+          <xsl:value-of select="$state"/>
+        </xsl:otherwise>
       </xsl:choose>
     </thermostat-state>
   </xsl:template>
