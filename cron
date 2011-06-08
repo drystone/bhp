@@ -33,6 +33,6 @@ cd `dirname $0`
 xsltproc targets.xsl zones.xml >$TMPDIR/targets.xml
 xsltproc state.xsl thermostats.xml >$TMP && mv $TMP $STATE
 xsltproc control.xsl controls.xml >$TMP && mv $TMP $CSTATE
-#xsltproc actuate.xsl $CSTATE 2>/dev/null | /bin/sh
-xsltproc actuate.xsl $CSTATE | /bin/sh
+xsltproc actuate.xsl $CSTATE 2>/dev/null | /bin/sh
+#xsltproc actuate.xsl $CSTATE | /bin/sh
 

@@ -2,10 +2,16 @@
 
 <controls>
   <control id="sitting_room_rad" type="fs20" device-code="1334">
-    <state thermostat-id="sitting_room"/>
+    <or>
+      <state thermostat-id="sitting_room"/>
+      <state thermostat-id="dump"/>
+    </or>
   </control>
   <control id="kitchen_rad" type="fs20" device-code="1234">
-    <state thermostat-id="kitchen"/>
+    <or>
+      <state thermostat-id="kitchen"/>
+      <state thermostat-id="dump"/>
+    </or>
   </control>
   <control id="so_bedroom_rad" type="fs20" device-code="1534">
     <state thermostat-id="so_bedroom"/>
@@ -36,7 +42,10 @@
     <state thermostat-id="boiler"/>
   </control>
   <control id="dhw" type="udin" device-code="3">
-    <state thermostat-id="dhw"/>
+    <or>
+      <state thermostat-id="dhw"/>
+      <state thermostat-id="dump"/>
+    </or>
   </control>
   <control id="solar" type="udin" device-code="5">
     <state thermostat-id="solar"/>

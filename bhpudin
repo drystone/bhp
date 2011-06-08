@@ -19,24 +19,33 @@
 import sys, serial
 
 def get_state(tty, device):
-    tty.write('s%s\r' % device)
-    s = tty.read(7)[4] # s[1-8]\r\n[01]\r\n
-    if s == '1':
-        return 'on'
-    elif s == '0':
-        return 'off'
-    else:
+    try:
+        tty.write('s%s\r' % device)
+        s = tty.read(7)[4] # s[1-8]\r\n[01]\r\n
+        if s == '1':
+            return 'on'
+        elif s == '0':
+            return 'off'
+        else:
+            return 'fail'
+    except IndexError:
         return 'fail'
 
-tty = serial.Serial("/dev/ttyUSB0")
-tty.flushOutput()
-tty.flushInput()
+tty = serial.Serial("/dev/ttyUSB0", timeout=1)
 
 for device, state in zip(sys.argv[1::2], sys.argv[2::2]):
-    tty.write(('n' if state == "on" else 'f') + device + '\r')
-    tty.read(4)
-    if get_state(tty, device) != state:
-        sys.stderr.write("Failed to switch %s %s\n" % (device, state))
+    attempts = 0
+    while 1:
+        tty.write(('n' if state == "on" else 'f') + device + '\r')
+        tty.read(4)
+        if get_state(tty, device) != state:
+            tty.flushOutput()
+            tty.flushInput()
+            if ++attempts > 3:
+                sys.stderr.write("Failed to switch %s %s\n" % (device, state))
+                break
+        else:
+            break
 
 tty.close()
 
