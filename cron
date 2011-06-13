@@ -21,6 +21,7 @@ TMP=$TMPDIR/.tmp
 TEMPERATURES=$TMPDIR/temperatures.xml
 STATE=$TMPDIR/state.xml
 CSTATE=$TMPDIR/control-state.xml
+LOG=bhplog
 
 for file in $TEMPERATURES $STATE $CSTATE; do
   if [ ! -e $file ]; then
@@ -35,4 +36,18 @@ xsltproc state.xsl thermostats.xml >$TMP && mv $TMP $STATE
 xsltproc control.xsl controls.xml >$TMP && mv $TMP $CSTATE
 xsltproc actuate.xsl $CSTATE 2>/dev/null | /bin/sh
 #xsltproc actuate.xsl $CSTATE | /bin/sh
+
+udinons=`cat $CSTATE | xmlstarlet sel \
+                -t -m "/control-states/control-state[@type='udin' and .='on']" \
+                -v "concat(@device-code,' ')"`
+teststate=`echo $udinons | python -c "import sys; print reduce(lambda x,y: int(x)+(1<<(int(y)-1)),('0 9 '+sys.stdin.readline()).strip().split(' ')) & 0xff"`
+curstate=`./bhpudin -s`
+
+DATE=`date -R`
+
+if [ $teststate -ne $curstate ]; then
+    echo "$DATE: udin - correct state=$teststate, actual state=$curstate" >>$LOG 
+    echo Serious problem buddy: UDIN state should be $teststate but is $curstate 1>&2
+    ./bhpudin -r $teststate
+fi
 
