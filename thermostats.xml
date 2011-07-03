@@ -6,7 +6,7 @@
   <thermostat name="Kitchen" id="kitchen" thermometer-id="kitchen" zone-id="kitchen"/>
   <thermostat name="John and Alex" id="ja_bedroom" thermometer-id="ja_bedroom" zone-id="ja_bedroom"/>
   <thermostat name="Sam and Oliver" id="so_bedroom" thermometer-id="so_bedroom" zone-id="so_bedroom"/>
-  <thermostat name="Heat Dump" id="dump" thermometer-id="tank_top" temperature="85" inverse="yes"/>
+  <thermostat name="Heat Dump" id="dump" thermometer-id="tank_bottom" temperature="85" inverse="yes"/>
   <dualstat name="Boiler" id="boiler" high-thermometer-id="tank_top" low-thermometer-id="tank_middle" low-temperature="55" high-temperature="65"/>
   <dualstat name="DHW" id="dhw" high-thermometer-id="dhw" low-thermometer-id="dhw" low-temperature="45" high-temperature="50"/>
   <thermostat name="Solar" id="solar" thermometer-id="solar" target-thermometer-id="tank_bottom" offset="-5" inverse="yes"/>

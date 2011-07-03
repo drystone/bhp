@@ -47,7 +47,7 @@
       <state thermostat-id="dump"/>
     </or>
   </control>
-  <control id="solar" type="udin" device-code="5">
+  <control id="solar" type="udin" device-code="8">
     <state thermostat-id="solar"/>
   </control>
 </controls>

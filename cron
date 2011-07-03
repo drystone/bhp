@@ -34,7 +34,11 @@ cd `dirname $0`
 xsltproc targets.xsl zones.xml >$TMPDIR/targets.xml
 xsltproc state.xsl thermostats.xml >$TMP && mv $TMP $STATE
 xsltproc control.xsl controls.xml >$TMP && mv $TMP $CSTATE
-xsltproc actuate.xsl $CSTATE 2>/dev/null | /bin/sh
+commands=$(xsltproc actuate.xsl $CSTATE 2>/dev/null)
+if [ -n "$commands" ]; then
+    echo $commands | /bin/sh
+    echo "$DATE: $commands" >>$LOG
+fi
 #xsltproc actuate.xsl $CSTATE | /bin/sh
 
 udinons=`cat $CSTATE | xmlstarlet sel \
@@ -45,9 +49,10 @@ curstate=`./bhpudin -s`
 
 DATE=`date -R`
 
-if [ $teststate -ne $curstate ]; then
+if [ x$teststate != x$curstate ]; then
     echo "$DATE: udin - correct state=$teststate, actual state=$curstate" >>$LOG 
     echo Serious problem buddy: UDIN state should be $teststate but is $curstate 1>&2
+    echo $commands
     ./bhpudin -r $teststate
 fi
 
