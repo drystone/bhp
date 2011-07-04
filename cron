@@ -22,6 +22,7 @@ TEMPERATURES=$TMPDIR/temperatures.xml
 STATE=$TMPDIR/state.xml
 CSTATE=$TMPDIR/control-state.xml
 LOG=bhplog
+DATE=`date -R`
 
 for file in $TEMPERATURES $STATE $CSTATE; do
   if [ ! -e $file ]; then
@@ -46,8 +47,6 @@ udinons=`cat $CSTATE | xmlstarlet sel \
                 -v "concat(@device-code,' ')"`
 teststate=`echo $udinons | python -c "import sys; print reduce(lambda x,y: int(x)+(1<<(int(y)-1)),('0 9 '+sys.stdin.readline()).strip().split(' ')) & 0xff"`
 curstate=`./bhpudin -s`
-
-DATE=`date -R`
 
 if [ x$teststate != x$curstate ]; then
     echo "$DATE: udin - correct state=$teststate, actual state=$curstate" >>$LOG 

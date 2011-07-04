@@ -23,11 +23,6 @@ bhp. If not, see [http://www.gnu.org/licenses/].
 
   <xsl:output method="text"/>
 
-  <xsl:variable name="nl">
-    <xsl:text>
-</xsl:text>
-  </xsl:variable>
-
   <xsl:template match="/">
     <xsl:call-template name="make-command">
       <xsl:with-param name="command" select="'./bhpx10 -t /dev/ttyUSB0'"/>
@@ -57,9 +52,9 @@ bhp. If not, see [http://www.gnu.org/licenses/].
     </xsl:variable>
     <xsl:if test="string-length($args)">
       <xsl:message>
-        <xsl:value-of select="concat($command, ' ', $args, $nl)"/>
+        <xsl:value-of select="concat($command, ' ', $args, '; ')"/>
       </xsl:message>
-      <xsl:value-of select="concat($command, ' ', $args, $nl)"/>
+      <xsl:value-of select="concat($command, ' ', $args, '; ')"/>
     </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
