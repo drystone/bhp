@@ -2,5 +2,5 @@
 
 bhpdir=/home/john/bhp
 
-xsltproc --stringparam mode "$1" $bhpdir/munin.xsl /tmp/state.xml
+/usr/bin/xsltproc --stringparam mode "$1" $bhpdir/munin.xsl /tmp/state.xml
 
