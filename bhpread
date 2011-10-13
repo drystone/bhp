@@ -18,9 +18,6 @@
 
 cd `dirname $0`
 
-echo "<?xml version=\"1.0\"?><temperatures>" \
-	`digitemp_DS2490 -c bhp.digitemprc -q -a \
-		-o "<temperature onewire-id=\"%R\">%C</temperature>" | tail -n+2` \
-	"</temperatures>" \
-	| xsltproc bhpread.xsl -
+# greps strip debug lines from python-ow output
+./owread 2>/dev/null  | grep -v ^0x |grep -v ^\(nil\) | xsltproc bhpread.xsl -
 

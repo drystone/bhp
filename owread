@@ -1,0 +1,19 @@
+#!/usr/bin/python
+
+import ow
+
+def temperatures(sensor):
+    for s in sensor.sensors():
+        temperatures(s)
+    try:
+        print '  <temperature onewire-id="%s%s%s">%f</temperature>' \
+              % (sensor.family, sensor.id, sensor.crc8, float(sensor.temperature))
+    except:
+        pass
+
+ow.init('localhost:4304')
+print '<?xml version="1.0"?>'
+print '<temperatures>'
+temperatures(ow.Sensor('/'))
+print '</temperatures>'
+ow.finish()
