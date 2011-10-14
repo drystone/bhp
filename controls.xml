@@ -19,6 +19,12 @@
   <control id="ja_bedroom_rad" type="bbsb" device-code="a01">
     <state thermostat-id="ja_bedroom"/>
   </control>
+  <control id="loo" type="udin" device-code="5">
+    <state thermostat-id="loo"/>
+  </control>
+  <control id="utility" type="udin" device-code="7">
+    <state thermostat-id="utility"/>
+  </control>
   <control id="bathroom_rad" type="udin" device-code="4">
     <or>
       <state thermostat-id="bathroom"/>
@@ -33,6 +39,8 @@
       <state thermostat-id="so_bedroom"/>
       <state thermostat-id="kitchen"/>
       <state thermostat-id="ja_bedroom"/>
+      <state thermostat-id="loo"/>
+      <state thermostat-id="utility"/>
       <state thermostat-id="dhw"/>
       <state thermostat-id="dump"/>
     </or>
