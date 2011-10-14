@@ -28,14 +28,29 @@ bhp. If not, see [http://www.gnu.org/licenses/].
   </xsl:variable>
 
   <xsl:param name="mode"/>
+  <xsl:param name="class"/>
 
   <!-- temperatures -->
   <xsl:template match="temperatures">
     <xsl:choose>
       <xsl:when test="$mode='config'">
-        <xsl:value-of select="concat('graph_title Temperatures',$newline)"/>
+        <xsl:variable name="title">
+          <xsl:choose>
+            <xsl:when test="$class='room'">Room </xsl:when>
+            <xsl:when test="$class='system'">System </xsl:when>
+            <xsl:otherwise><xsl:value-of select="$class"/></xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:value-of select="concat('graph_title ',$title,'Temperatures',$newline)"/>
         <xsl:value-of select="concat('graph_vlabel temp in C',$newline)"/>
-        <xsl:apply-templates select="document('thermometers.xml')/thermometers/thermometer"/>
+        <xsl:choose>
+          <xsl:when test="$class='room' or $class='system'">
+            <xsl:apply-templates select="document('thermometers.xml')/thermometers/thermometer[@munin-class=$class]"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="document('thermometers.xml')/thermometers/thermometer"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates select="temperature"/>
