@@ -56,7 +56,10 @@
     </or>
   </control>
   <control id="solar" type="udin" device-code="8">
-    <state thermostat-id="solar"/>
+    <or>
+      <state thermostat-id="solar"/>
+      <state thermostat-id="frost"/>
+    </or>
   </control>
 </controls>
 

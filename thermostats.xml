@@ -12,5 +12,6 @@
   <dualstat name="Boiler" id="boiler" high-thermometer-id="tank_top" low-thermometer-id="tank_middle" low-temperature="55" high-temperature="65"/>
   <dualstat name="DHW" id="dhw" high-thermometer-id="dhw" low-thermometer-id="dhw" low-temperature="45" high-temperature="50"/>
   <thermostat name="Solar" id="solar" thermometer-id="solar" target-thermometer-id="tank_bottom" offset="-5" inverse="yes"/>
+  <thermostat name="Frost" id="frost" thermometer-id="solar" temperature="5"/>
 </thermostats>
 
