@@ -47,8 +47,14 @@ bhp. If not, see [http://www.gnu.org/licenses/].
         </xsl:if>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:variable name="id" select="@id"/>
-        <xsl:value-of select="concat($id,'.value ',document('/tmp/state.xml')/thermostat-states/thermostat-state[@thermostat-id=$id],$newline)"/>
+        <xsl:variable name="binary-state">
+          <xsl:variable name="id" select="@id"/>
+          <xsl:choose>
+            <xsl:when test="document('/tmp/state.xml')/thermostat-states/thermostat-state[@thermostat-id=$id]/text()='on'">1</xsl:when>
+            <xsl:otherwise>0</xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:value-of select="concat(@id,'.value ',count(preceding-sibling::thermostat)*2+$binary-state,$newline)"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
