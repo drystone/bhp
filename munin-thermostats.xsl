@@ -34,10 +34,10 @@ bhp. If not, see [http://www.gnu.org/licenses/].
       <xsl:value-of select="concat('graph_title Thermostats',$newline)"/>
       <xsl:value-of select="concat('graph_vlabel State On/Off',$newline)"/>
     </xsl:if>
-    <xsl:apply-templates select="thermostat"/>
+    <xsl:apply-templates select="thermostat|dualstat"/>
   </xsl:template>
 
-  <xsl:template match="thermostat">
+  <xsl:template match="thermostat|dualstat">
     <xsl:choose>
       <xsl:when test="$mode='config'">
         <xsl:variable name="colour" select="document('munin.xml')/colours/colour[@id=current()/@id]"/>
@@ -54,7 +54,7 @@ bhp. If not, see [http://www.gnu.org/licenses/].
             <xsl:otherwise>0</xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
-        <xsl:value-of select="concat(@id,'.value ',count(preceding-sibling::thermostat)*2+$binary-state,$newline)"/>
+        <xsl:value-of select="concat(@id,'.value ',count(preceding-sibling::thermostat|preceding-sibling::dualstat)*2+$binary-state,$newline)"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
