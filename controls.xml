@@ -73,6 +73,14 @@
     </or>
   </control>
 
+  <control id="dump">
+    <over thermostat-id="dump"/>
+  </control>
+
+  <control id="frost">
+    <under thermostat-id="frost"/>
+  </control>
+
   <macro id="dhw">
     <or>
       <and>
