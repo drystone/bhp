@@ -50,7 +50,7 @@ bhp. If not, see [http://www.gnu.org/licenses/].
         <xsl:variable name="binary-state">
           <xsl:variable name="id" select="@id"/>
           <xsl:choose>
-            <xsl:when test="document('/tmp/state.xml')/thermostat-states/thermostat-state[@thermostat-id=$id]/text()='on'">1</xsl:when>
+            <xsl:when test="document('/tmp/state.xml')/thermostat-states/thermostat-state[@thermostat-id=$id]/text()='under'">1</xsl:when>
             <xsl:otherwise>0</xsl:otherwise>
           </xsl:choose>
         </xsl:variable>

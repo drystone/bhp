@@ -3,63 +3,88 @@
 <controls>
   <control id="sitting_room_rad" type="fs20" device-code="1334">
     <or>
-      <state thermostat-id="sitting_room"/>
-      <state thermostat-id="dump"/>
+      <under thermostat-id="sitting_room"/>
+      <over thermostat-id="dump"/>
     </or>
   </control>
   <control id="kitchen_rad" type="fs20" device-code="1234">
     <or>
-      <state thermostat-id="kitchen"/>
-      <state thermostat-id="dump"/>
+      <under thermostat-id="kitchen"/>
+      <over thermostat-id="dump"/>
     </or>
   </control>
   <control id="so_bedroom_rad" type="fs20" device-code="1534">
-    <state thermostat-id="so_bedroom"/>
+    <under thermostat-id="so_bedroom"/>
   </control>
   <control id="ja_bedroom_rad" type="bbsb" device-code="a01">
-    <state thermostat-id="ja_bedroom"/>
+    <under thermostat-id="ja_bedroom"/>
   </control>
   <control id="loo" type="udin" device-code="5">
-    <state thermostat-id="loo"/>
+    <under thermostat-id="loo"/>
   </control>
   <control id="utility" type="udin" device-code="7">
-    <state thermostat-id="utility"/>
+    <under thermostat-id="utility"/>
   </control>
   <control id="bathroom_rad" type="udin" device-code="4">
     <or>
-      <state thermostat-id="bathroom"/>
-      <state thermostat-id="dump"/>
+      <under thermostat-id="bathroom"/>
+      <over thermostat-id="dump"/>
     </or>
   </control>
   <!-- central heating pump + zone valve -->
   <control id="central_heating" type="udin" device-code="2">
     <or>
-      <state thermostat-id="sitting_room"/>
-      <state thermostat-id="bathroom"/>
-      <state thermostat-id="so_bedroom"/>
-      <state thermostat-id="kitchen"/>
-      <state thermostat-id="ja_bedroom"/>
-      <state thermostat-id="loo"/>
-      <state thermostat-id="utility"/>
-      <state thermostat-id="dhw"/>
-      <state thermostat-id="dump"/>
+      <under thermostat-id="sitting_room"/>
+      <under thermostat-id="bathroom"/>
+      <under thermostat-id="so_bedroom"/>
+      <under thermostat-id="kitchen"/>
+      <under thermostat-id="ja_bedroom"/>
+      <under thermostat-id="loo"/>
+      <under thermostat-id="utility"/>
+      <true macro-id="dhw"/>
+      <over thermostat-id="dump"/>
     </or>
   </control>
   <!-- boiler pump + boiler -->
   <control id="boiler" type="udin" device-code="1">
-    <state thermostat-id="boiler"/>
+    <or>
+      <and>
+        <on control-id="boiler"/>
+        <under thermostat-id="tank-high"/>
+      </and>
+      <and>
+        <off control-id="boiler"/>
+        <under thermostat-id="tank-low"/>
+      </and>
+    </or>
   </control>
+
   <control id="dhw" type="udin" device-code="3">
     <or>
-      <state thermostat-id="dhw"/>
-      <state thermostat-id="dump"/>
+      <true macro-id="dhw"/>
+      <over thermostat-id="dump"/>
     </or>
   </control>
+
   <control id="solar" type="udin" device-code="8">
     <or>
-      <state thermostat-id="solar"/>
-      <state thermostat-id="frost"/>
+      <over thermostat-id="solar"/>
+      <under thermostat-id="frost"/>
     </or>
   </control>
+
+  <macro id="dhw">
+    <or>
+      <and>
+        <on control-id="dhw"/>
+        <under thermostat-id="dhw-high"/>
+      </and>
+      <and>
+        <off control-id="dhw"/>
+        <under thermostat-id="dhw-low"/>
+      </and>
+    </or>
+  </macro>
+
 </controls>
 

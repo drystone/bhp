@@ -32,13 +32,39 @@ bhp. If not, see [http://www.gnu.org/licenses/].
   </xsl:template>
 
   <xsl:template match="control">
-    <control-state id="{@id}" type="{@type}" device-code="{@device-code}" last-state="{$old[@id=current()/@id]}">
+    <xsl:variable name="result">
       <xsl:apply-templates select="*"/>
+    </xsl:variable>
+    <control-state id="{@id}" type="{@type}" device-code="{@device-code}" last-state="{$old[@id=current()/@id]}">
+      <xsl:choose>
+        <xsl:when test="$result='true'">on</xsl:when>
+        <xsl:otherwise>off</xsl:otherwise>
+      </xsl:choose>
     </control-state>
   </xsl:template>
 
-  <xsl:template match="state">
-    <xsl:value-of select="document('/tmp/state.xml')/thermostat-states/thermostat-state[@thermostat-id=current()/@thermostat-id]"/>
+  <xsl:template match="under|over">
+    <xsl:choose>
+      <xsl:when test="document('/tmp/state.xml')/thermostat-states/thermostat-state[@thermostat-id=current()/@thermostat-id] = local-name()">true</xsl:when>
+      <xsl:otherwise>false</xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="on|off">
+    <xsl:choose>
+      <xsl:when test="$old[@id=current()/@control-id] = local-name()">true</xsl:when>
+      <xsl:otherwise>false</xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="true|false">
+    <xsl:variable name="result">
+      <xsl:apply-templates select="/controls/macro[@id=current()/@macro-id]/*"/>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$result = local-name()">true</xsl:when>
+      <xsl:otherwise>false</xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="or">
@@ -53,13 +79,13 @@ bhp. If not, see [http://www.gnu.org/licenses/].
       <xsl:apply-templates select="$next"/>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="$result='on'">on</xsl:when>
+      <xsl:when test="$result='true'">true</xsl:when>
       <xsl:when test="$next/following-sibling::*">
         <xsl:call-template name="or-next">
           <xsl:with-param name="next" select="$next/following-sibling::*[1]"/>
         </xsl:call-template>
       </xsl:when>
-      <xsl:otherwise>off</xsl:otherwise>
+      <xsl:otherwise>false</xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
@@ -75,13 +101,13 @@ bhp. If not, see [http://www.gnu.org/licenses/].
       <xsl:apply-templates select="$next"/>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="$result='off'">off</xsl:when>
+      <xsl:when test="$result='false'">false</xsl:when>
       <xsl:when test="$next/following-sibling::*">
         <xsl:call-template name="and-next">
           <xsl:with-param name="next" select="$next/following-sibling::*[1]"/>
         </xsl:call-template>
       </xsl:when>
-      <xsl:otherwise>on</xsl:otherwise>
+      <xsl:otherwise>true</xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
@@ -90,8 +116,8 @@ bhp. If not, see [http://www.gnu.org/licenses/].
       <xsl:apply-templates select="*"/>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="$result='on'">off</xsl:when>
-      <xsl:otherwise>off</xsl:otherwise>
+      <xsl:when test="$result='true'">false</xsl:when>
+      <xsl:otherwise>true</xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 </xsl:stylesheet>

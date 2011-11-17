@@ -8,5 +8,6 @@
   <zone id="so_bedroom" name="Sam and Oliver"/>
   <zone id="loo" name="Downstairs Loo"/>
   <zone id="utility" name="Utility Room"/>
+  <zone id="dhw" name="DHW"/>
 </zones>
 
