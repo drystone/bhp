@@ -23,7 +23,10 @@
     <under thermostat-id="loo"/>
   </control>
   <control id="utility" type="udin" device-code="7">
-    <under thermostat-id="utility"/>
+    <or>
+      <under thermostat-id="utility"/>
+      <over thermostat-id="dump"/>
+    </or>
   </control>
   <control id="bathroom_rad" type="udin" device-code="4">
     <or>
@@ -31,32 +34,32 @@
       <over thermostat-id="dump"/>
     </or>
   </control>
-  <!-- central heating pump + zone valve -->
+  <!-- central heating pump -->
   <control id="central_heating" type="udin" device-code="2">
     <or>
-      <under thermostat-id="sitting_room"/>
-      <under thermostat-id="bathroom"/>
-      <under thermostat-id="so_bedroom"/>
-      <under thermostat-id="kitchen"/>
-      <under thermostat-id="ja_bedroom"/>
-      <under thermostat-id="loo"/>
-      <under thermostat-id="utility"/>
+      <true macro-id="heating"/>
       <true macro-id="dhw"/>
       <over thermostat-id="dump"/>
     </or>
   </control>
   <!-- boiler pump + boiler -->
   <control id="boiler" type="udin" device-code="1">
-    <or>
-      <and>
-        <on control-id="boiler"/>
-        <under thermostat-id="tank-high"/>
-      </and>
-      <and>
-        <off control-id="boiler"/>
-        <under thermostat-id="tank-low"/>
-      </and>
-    </or>
+    <and>
+      <or>
+        <true macro-id="heating"/>
+        <true macro-id="dhw"/>
+      </or>
+      <or>
+        <and>
+          <on control-id="boiler"/>
+          <under thermostat-id="tank-high"/>
+        </and>
+        <and>
+          <off control-id="boiler"/>
+          <under thermostat-id="tank-low"/>
+        </and>
+      </or>
+    </and>
   </control>
 
   <control id="dhw" type="udin" device-code="3">
@@ -73,14 +76,6 @@
     </or>
   </control>
 
-  <control id="dump">
-    <over thermostat-id="dump"/>
-  </control>
-
-  <control id="frost">
-    <under thermostat-id="frost"/>
-  </control>
-
   <macro id="dhw">
     <or>
       <and>
@@ -91,6 +86,18 @@
         <off control-id="dhw"/>
         <under thermostat-id="dhw-low"/>
       </and>
+    </or>
+  </macro>
+
+  <macro id="heating">
+    <or>
+      <under thermostat-id="sitting_room"/>
+      <under thermostat-id="bathroom"/>
+      <under thermostat-id="so_bedroom"/>
+      <under thermostat-id="kitchen"/>
+      <under thermostat-id="ja_bedroom"/>
+      <under thermostat-id="loo"/>
+      <under thermostat-id="utility"/>
     </or>
   </macro>
 
