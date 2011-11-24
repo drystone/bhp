@@ -8,6 +8,7 @@
   <thermometer onewire-id="28AB283C02000069" id="loo" name="Downstairs Loo" munin-class="room"/>
   <thermometer onewire-id="28914F3C0200000B" id="utility" name="Utility Room" munin-class="room"/>
   <thermometer onewire-id="280F543C020000A5" id="back_passage" name="Back Passage" munin-class="room"/>
+  <thermometer onewire-id="107C2BCB010800E6" id="office" name="Office" munin-class="room"/>
   <thermometer onewire-id="28F05E3C0200004E" id="tank_middle" name="Tank Middle" munin-class="system"/>
   <thermometer onewire-id="28A23B3C020000CD" id="tank_bottom" name="Tank Bottom" munin-class="system"/>
   <thermometer onewire-id="2846393C020000BB" id="tank_top" name="Tank Top" munin-class="system"/>
