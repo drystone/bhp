@@ -44,22 +44,20 @@
   </control>
   <!-- boiler pump + boiler -->
   <control id="boiler" type="udin" device-code="1">
-    <and>
-      <or>
-        <true macro-id="heating"/>
-        <true macro-id="dhw"/>
-      </or>
-      <or>
-        <and>
-          <on control-id="boiler"/>
-          <under thermostat-id="tank-high"/>
-        </and>
-        <and>
-          <off control-id="boiler"/>
-          <under thermostat-id="tank-low"/>
-        </and>
-      </or>
-    </and>
+    <or>
+      <and>
+        <on control-id="boiler"/>
+        <under thermostat-id="tank-high"/>
+      </and>
+      <and>
+        <off control-id="boiler"/>
+        <under thermostat-id="tank-low"/>
+        <or>
+          <true macro-id="heating"/>
+          <true macro-id="dhw"/>
+        </or>
+      </and>
+    </or>
   </control>
 
   <control id="dhw" type="udin" device-code="3">
