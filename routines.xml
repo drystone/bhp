@@ -11,6 +11,7 @@
     <timer zone-id="ja_bedroom" start="PT21H30M" end="PT22H" climate-id="cool"/>
     <timer zone-id="so_bedroom" start="PT06H30M" end="PT07H" climate-id="warm"/>
     <timer zone-id="so_bedroom" start="PT21H00M" end="PT22H" climate-id="cool"/>
+    <timer zone-id="loo" start="PT06H30M" end="PT07H30M" climate-id="cool`"/>
     <timer zone-id="dhw" start="PT06H" end="PT07H" climate-id="dhw"/>
     <timer zone-id="dhw" start="PT19H" end="PT22H" climate-id="dhw"/>
   </daily-routine>

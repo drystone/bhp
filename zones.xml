@@ -6,8 +6,8 @@
   <zone id="kitchen" name="Kitchen"/>
   <zone id="ja_bedroom" name="John and Alex"/>
   <zone id="so_bedroom" name="Sam and Oliver"/>
-  <zone id="loo" name="Downstairs Loo"/>
-  <zone id="utility" name="Utility Room"/>
+  <zone id="loo" name="Downstairs Loo" default-climate-id="off"/>
+  <zone id="utility" name="Utility Room" default-climate-id="off"/>
   <zone id="dhw" name="DHW"/>
 </zones>
 
