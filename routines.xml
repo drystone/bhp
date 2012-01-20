@@ -32,7 +32,7 @@
     <timer zone-id="bathroom" start="PT00H" end="PT00H" climate-id="cold"/>
   </daily-routine>
   <weekly-routines>
-    <weekly-routine routine-id="work" start="PT18H" end="P5DT16H"/>
+    <weekly-routine routine-id="work" start="PT18H" end="P5DT20H"/>
     <weekly-routine routine-id="home" start="P5DT20H" end="PT18H"/>
   </weekly-routines>
   <special-routines>
