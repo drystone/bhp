@@ -5,7 +5,7 @@
     <timer zone-id="sitting_room" start="PT15H30M" end="PT22H" climate-id="cool"/>
     <timer zone-id="kitchen" start="PT06H30M" end="PT07H30M" climate-id="warm"/>
     <timer zone-id="kitchen" start="PT16H30M" end="PT19H30M" climate-id="warm"/>
-    <timer zone-id="bathroom" start="PT06H00M" end="PT07H" climate-id="warm"/>
+    <timer zone-id="bathroom" start="PT05H30M" end="PT07H" climate-id="warm"/>
     <timer zone-id="bathroom" start="PT20H" end="PT22H" climate-id="warm"/>
     <timer zone-id="ja_bedroom" start="PT05H30M" end="PT06H30M" climate-id="warm"/>
     <timer zone-id="ja_bedroom" start="PT21H30M" end="PT22H" climate-id="cool"/>
@@ -29,7 +29,7 @@
     <timer zone-id="dhw" start="PT18H" end="PT22H" climate-id="dhw"/>
   </daily-routine>
   <daily-routine id="away" name="Away">
-    <timer zone-id="bathroom" start="PT00H" end="PT00H" climate-id="cold"/>
+    <timer zone-id="bathroom" start="PT00H" end="PT00H" climate-id="off"/>
   </daily-routine>
   <weekly-routines>
     <weekly-routine routine-id="work" start="PT18H" end="P5DT20H"/>
