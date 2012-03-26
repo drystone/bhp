@@ -84,6 +84,7 @@
         <off control-id="dhw"/>
         <under thermostat-id="dhw-low"/>
       </and>
+      <over thermostat-id="dump"/>
     </or>
   </macro>
 
