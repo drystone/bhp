@@ -6,7 +6,7 @@
     <timer zone-id="kitchen" start="PT06H30M" end="PT07H30M" climate-id="warm"/>
     <timer zone-id="kitchen" start="PT16H30M" end="PT19H30M" climate-id="warm"/>
     <timer zone-id="bathroom" start="PT05H30M" end="PT07H" climate-id="warm"/>
-    <timer zone-id="bathroom" start="PT06H" end="PT06H30M" climate-id="hot"/>
+    <timer zone-id="bathroom" start="PT06H" end="PT06H30M" climate-id="on"/>
     <timer zone-id="bathroom" start="PT20H" end="PT22H" climate-id="warm"/>
     <timer zone-id="ja_bedroom" start="PT05H30M" end="PT06H30M" climate-id="warm"/>
     <timer zone-id="ja_bedroom" start="PT21H30M" end="PT22H" climate-id="cool"/>
