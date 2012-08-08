@@ -37,8 +37,8 @@ xsltproc state.xsl thermostats.xml >$TMP && mv $TMP $STATE
 xsltproc control.xsl controls.xml >$TMP && mv $TMP $CSTATE
 commands=$(xsltproc actuate.xsl $CSTATE 2>/dev/null)
 if [ -n "$commands" ]; then
-    echo $commands | /bin/sh
     echo "$DATE: $commands" >>$LOG
+    echo $commands | /bin/sh
 fi
 #xsltproc actuate.xsl $CSTATE | /bin/sh
 
