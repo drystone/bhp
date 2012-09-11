@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# Copyright 2010 John Hedges
+# Copyright 2010,2012 John Hedges
 #
 # This file is part of bhp.
 #
@@ -16,50 +16,12 @@
 # You should have received a copy of the GNU General Public License along with
 # bhp. If not, see <http://www.gnu.org/licenses/>.
 
-import argparse, os, sys, serial
-
-class UdinException(Exception):
-    pass
-
-class Udin:
-    def __init__(self, device_path):
-        self._tty = serial.Serial(device_path, timeout=1)
-
-    def switch(self, device, state):
-        """device 1-8, state 'on' or 'off'"""
-        if state == 'on':
-            self._send_command('n' + device)
-        else:
-            self._send_command('f' + device)
-
-    def get_state(self):
-        self._send_command('s0')
-        return self._recv()
-
-    def set_state(self, state):
-        self._send_command('r%d' % state)
-
-    def _send_command(self, command, attempts=3):
-        self._tty.write(command + '\r')
-        echo = self._recv()
-        if echo != command:
-            self._tty.flushOutput()
-            self._tty.flushInput()
-            if --attempts:
-                self._send_command(command, attempts)
-            else:
-                raise UdinException()
-            
-    def _recv(self):
-        return self._tty.readline()[:-2]
-
-    def close(self):
-        self._tty.close()
+import argparse, os, sys, socket
 
 parser = argparse.ArgumentParser(description='Control the UDIN device')
 parser.add_argument('-s', '--status', action='store_true', help='get the current switch settings')
 parser.add_argument('-r', '--reset', type=int, nargs='?', const='0', help='set the current switch settings (without param sets all to off)')
-parser.add_argument('-d', '--device', default='/dev/ttyUSB0', help='sepcify UDIN device (defaults to /dev/ttyUSB0)')
+parser.add_argument('-a', '--address', default='/tmp/udind', help='address of unix domain socket to connect to (defaults to /tmp/udind)')
 parser.add_argument('command', nargs='*', help='command pairs eg. 1 on 2 off ...')
 args = parser.parse_args()
 
@@ -77,15 +39,15 @@ except Exception:
     parser.print_help()
     sys.exit(-1)
 
-try:
-    udin = Udin(args.device)
-    if type(args.reset) == int and args.reset >= 0:
-        udin.set_state(args.reset & 0xff)
-    for device, state in zip(args.command[0::2], args.command[1::2]):
-        udin.switch(device, state)
-    if args.status:
-         sys.stdout.write(udin.get_state()+'\n')
-    udin.close()
-except Exception as e:
-    sys.stderr.write(os.path.basename(sys.argv[0]) + ': ' + str(e) + '\n')
-    sys.exit(-1)
+s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+s.connect(args.address)
+if type(args.reset) == int and args.reset >= 0:
+    s.sendall('reset {0}\n'.format(args.reset & 0xff))
+for device, state in zip(args.command[0::2], args.command[1::2]):
+    s.sendall('switch {0} {1}\n'.format(device, state))
+if args.status:
+    s.sendall('status\n')
+    state = s.recv(1024)
+    sys.stdout.write(state+'\n')
+s.close
+
