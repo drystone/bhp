@@ -4,7 +4,5 @@
 
 class=${0##*bhp_thermometers_}
 
-bhpdir=/home/john/bhp
-
-/usr/bin/xsltproc --stringparam mode "$1" --stringparam class "$class" $bhpdir/munin-thermometers.xsl $bhpdir/thermometers.xml
+/usr/bin/xsltproc --stringparam mode "$1" --stringparam class "$class" /usr/lib/bhp/munin-thermometers.xsl /etc/bhp/thermometers.xml
 

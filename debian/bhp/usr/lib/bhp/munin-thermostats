@@ -1,6 +1,0 @@
-#!/bin/sh
-
-bhpdir=/home/john/bhp
-
-/usr/bin/xsltproc --stringparam mode "$1" $bhpdir/munin-thermostats.xsl $bhpdir/thermostats.xml
-
