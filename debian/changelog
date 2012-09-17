@@ -1,0 +1,17 @@
+bhp (1.0.3) unstable; urgency=low
+
+  * Adds owserver as dependency
+
+ -- John Hedges <john@drystone.co.uk>  Tue, 11 Sep 2012 16:28:32 +0100
+
+bhp (1.0.2) unstable; urgency=low
+
+  * Adds xsltproc as dependency
+
+ -- John Hedges <john@drystone.co.uk>  Tue, 11 Sep 2012 16:19:52 +0100
+
+bhp (1.0.1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- John Hedges <john@drystone.co.uk>  Tue, 11 Sep 2012 14:29:57 +0100

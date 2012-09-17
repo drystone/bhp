@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+<routines>
+  <daily-routine id="work" name="Work">
+    <timer zone-id="sitting_room" start="PT15H30M" end="PT22H" climate-id="cool"/>
+    <timer zone-id="kitchen" start="PT06H30M" end="PT07H30M" climate-id="warm"/>
+    <timer zone-id="kitchen" start="PT16H30M" end="PT19H30M" climate-id="warm"/>
+    <timer zone-id="bathroom" start="PT05H30M" end="PT06H" climate-id="on"/>
+    <timer zone-id="bathroom" start="PT06H" end="PT07H" climate-id="hot"/>
+    <timer zone-id="bathroom" start="PT20H" end="PT20H30M" climate-id="on"/>
+    <timer zone-id="bathroom" start="PT20H30M" end="PT22H" climate-id="hot"/>
+    <timer zone-id="ja_bedroom" start="PT05H30M" end="PT06H30M" climate-id="warm"/>
+    <timer zone-id="ja_bedroom" start="PT21H30M" end="PT22H" climate-id="cool"/>
+    <timer zone-id="so_bedroom" start="PT06H30M" end="PT07H" climate-id="warm"/>
+    <timer zone-id="so_bedroom" start="PT21H00M" end="PT22H" climate-id="cool"/>
+    <timer zone-id="loo" start="PT06H30M" end="PT07H30M" climate-id="cool`"/>
+    <timer zone-id="dhw" start="PT05H30M" end="PT07H" climate-id="dhw"/>
+    <timer zone-id="dhw" start="PT19H" end="PT22H" climate-id="dhw"/>
+  </daily-routine>
+  <daily-routine id="home" name="Home">
+    <timer zone-id="sitting_room" start="PT18H" end="PT22H" climate-id="cool"/>
+    <timer zone-id="kitchen" start="PT08H" end="PT20H" climate-id="cool"/>
+    <timer zone-id="bathroom" start="PT06H" end="PT06H30M" climate-id="on"/>
+    <timer zone-id="bathroom" start="PT06H30M" end="PT10H" climate-id="hot"/>
+    <timer zone-id="bathroom" start="PT20H" end="PT20H30M" climate-id="on"/>
+    <timer zone-id="bathroom" start="PT20H30M" end="PT22H30M" climate-id="hot"/>
+    <timer zone-id="ja_bedroom" start="PT07H30M" end="PT09H" climate-id="cool"/>
+    <timer zone-id="ja_bedroom" start="PT22H" end="PT23H" climate-id="cool"/>
+    <timer zone-id="so_bedroom" start="PT08H" end="PT10H" climate-id="cool"/>
+    <timer zone-id="so_bedroom" start="PT20H30M" end="PT22H" climate-id="cool"/>
+    <timer zone-id="dhw" start="PT07H" end="PT09H" climate-id="dhw"/>
+    <timer zone-id="dhw" start="PT12H" end="PT15H" climate-id="dhw"/>
+    <timer zone-id="dhw" start="PT18H" end="PT22H" climate-id="dhw"/>
+  </daily-routine>
+  <daily-routine id="away" name="Away">
+    <timer zone-id="bathroom" start="PT00H" end="PT00H" climate-id="off"/>
+  </daily-routine>
+  <weekly-routines>
+    <weekly-routine routine-id="work" start="PT18H" end="P5DT20H"/>
+    <weekly-routine routine-id="home" start="P5DT20H" end="PT18H"/>
+  </weekly-routines>
+  <special-routines>
+    <!--special-routine routine-id="home" start="2010-04-01T08:00:00" end="2010-04-03T12:00:00"/-->
+    <special-routine routine-id="home" start="2012-08-01T08:00:00" end="2012-08-11T12:00:00"/>
+  </special-routines>
+  <overrides/>
+  <!--override zone-id="bathroom" end="2010-09-26T18:00:00" climate-id="on"/-->
+</routines>

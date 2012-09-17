@@ -1,0 +1,12 @@
+Source: bhp
+Section: misc
+Priority: extra
+Maintainer: John Hedges <john@drystone.co.uk>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.3
+
+Package: bhp
+Architecture: all
+Depends: ${misc:Depends}, python-ow, xsltproc, owserver, python-serial, xmlstarlet, munin-node
+Description: bhp heating program
+ stuff and nonsense

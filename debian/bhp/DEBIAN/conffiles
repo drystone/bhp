@@ -1,0 +1,9 @@
+/etc/bhp/thermometers.xml
+/etc/bhp/controls.xml
+/etc/bhp/zones.xml
+/etc/bhp/thermostats.xml
+/etc/bhp/routines.xml
+/etc/bhp/climates.xml
+/etc/bhp/munin.xml
+/etc/cron.d/bhp
+/etc/init.d/bhp
