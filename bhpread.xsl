@@ -33,8 +33,8 @@ bhp. If not, see [http://www.gnu.org/licenses/].
   </xsl:template>
   
   <xsl:template match="thermometer">
-		<temperature onewire-id="{@onewire-id}" thermometer-id="{@id}">
-      <xsl:variable name="temperature" select="$new/temperature[@onewire-id=current()/@onewire-id]"/>
+		<temperature device-id="{@device-id}" thermometer-id="{@id}">
+      <xsl:variable name="temperature" select="$new/temperature[@device-id=current()/@device-id]"/>
       <xsl:choose>
         <xsl:when test="count($temperature)">
           <xsl:choose>
@@ -47,7 +47,7 @@ bhp. If not, see [http://www.gnu.org/licenses/].
           </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="$old/temperature[@onewire-id=current()/@onewire-id]"/>
+          <xsl:value-of select="$old/temperature[@device-id=current()/@device-id]"/>
         </xsl:otherwise>
       </xsl:choose>
     </temperature>

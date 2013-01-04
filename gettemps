@@ -1,0 +1,33 @@
+#!/usr/bin/python
+
+import ow
+import sys
+import os
+
+fmt = '  <temperature device-id="{}">{}</temperature>'
+arexx_dir = '/mnt/arexx/'
+
+def temperatures(sensor):
+    for s in sensor.sensors():
+        temperatures(s)
+    try:
+        print fmt.format(sensor.family + sensor.id + sensor.crc8, float(sensor.temperature))
+    except:
+        pass
+
+print '<?xml version="1.0"?>'
+print '<temperatures>'
+
+# read ow sensors
+ow.init('localhost:4304')
+temperatures(ow.Sensor('/'))
+ow.finish()
+
+# read arexx sensors
+for i in os.listdir(arexx_dir):
+    raw = int(open(arexx_dir + i).read(), 16)
+    if raw >= 0x8000:
+        raw -= 0x10000
+    print fmt.format(i, 0.0078 * raw)
+
+print '</temperatures>'

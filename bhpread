@@ -19,5 +19,5 @@
 cd `dirname $0`
 
 # grep strips debug lines from python-ow output
-./owread | xsltproc bhpread.xsl -
+./gettemps | xsltproc bhpread.xsl -
 

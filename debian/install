@@ -2,7 +2,7 @@ cron                    /usr/lib/bhp
 bhpread                 /usr/lib/bhp
 bhpudind                /usr/lib/bhp      
 bhpbbsb                 /usr/lib/bhp
-owread                  /usr/lib/bhp
+gettemps                /usr/lib/bhp
 bhpweb                  /usr/lib/bhp
 bhpx10                  /usr/lib/bhp
 bhpfs20                 /usr/lib/bhp
