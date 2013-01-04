@@ -13,6 +13,9 @@
       <over thermostat-id="dump"/>
     </or>
   </control>
+  <control id="study_rad" type="fs20" device-code="1434">
+    <under thermostat-id="study"/>
+  </control>
   <control id="so_bedroom_rad" type="fs20" device-code="1534">
     <under thermostat-id="so_bedroom"/>
   </control>
@@ -97,6 +100,7 @@
       <under thermostat-id="ja_bedroom"/>
       <under thermostat-id="loo"/>
       <under thermostat-id="utility"/>
+      <under thermostat-id="study"/>
     </or>
   </macro>
 
