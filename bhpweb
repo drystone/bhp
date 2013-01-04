@@ -87,14 +87,14 @@ def application(environ, start_response):
 
     if path == '/pimp.html':
         fs = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
-        routines_tree = etree.parse('routines.xml')
+        routines_tree = etree.parse('/etc/bhp/routines.xml')
         overrides = routines_tree.xpath('/routines/overrides')[0]
         override = etree.Element('override')
         override.set('zone-id', fs.getfirst('zone'))
         override.set('climate-id', fs.getfirst('climate'))
         override.set('end', time.strftime('%Y-%m-%dT%H:%M:00', time.localtime(time.time() + int(fs.getfirst('duration')))))
         overrides.append(override)
-        f = open('routines.xml', 'w')
+        f = open('/etc/bhp/routines.xml', 'w')
         f.write(etree.tostring(routines_tree, encoding='utf-8', pretty_print=True, xml_declaration=True))
         f.close()
         start_response("302 Found", [('Content-Type', 'text/html'), ('Location','/index.html')])
