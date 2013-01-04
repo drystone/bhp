@@ -13,7 +13,7 @@
   <thermostat name="Tank High" id="tank-high" thermometer-id="tank_middle" temperature="65"/>
   <thermostat name="DHW Low" id="dhw-low" thermometer-id="dhw" zone-id="dhw" offset="3"/>
   <thermostat name="DHW High" id="dhw-high" thermometer-id="dhw" zone-id="dhw" offset="-3"/>
-  <thermostat name="Solar" id="solar" thermometer-id="solar" target-thermometer-id="tank_bottom" offset="-2"/>
+  <thermostat name="Solar" id="solar" thermometer-id="solar" target-thermometer-id="tank_bottom" offset="-5"/>
   <thermostat name="Frost" id="frost" thermometer-id="solar" temperature="5"/>
 </thermostats>
 
