@@ -37,14 +37,16 @@ def application(environ, start_response):
             except:
                 state = 'unknown'
             try:
-                current = temperature_tree.xpath("/temperatures/temperature[@thermometer-id='%s']" % thermometer_id)[0].text
+                t = temperature_tree.xpath("/temperatures/temperature[@thermometer-id='%s']" % thermometer_id)[0].text
+                current = "{:0.1f}".format(float(t))
             except:
-                current = 0
+                current = 'N/A'
             try:
-                target = target_tree.xpath("/targets/target[@zone-id='%s']" % zone_id)[0].text
+                t = target_tree.xpath("/targets/target[@zone-id='%s']" % zone_id)[0].text
+                target = "{:0.1f}".format(float(t))
             except:
-                target = 0
-            thermostats += '<tr><td>%s</td><td>%s</td><td>%0.1f</td><td>%0.1f</td></tr>' % (name, state, float(current), float(target))
+                target = 'N/A'
+            thermostats += '<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>'.format(name, state, current, target)
             
                 
         start_response("200 Found", [('Content-Type', 'text/html')])
