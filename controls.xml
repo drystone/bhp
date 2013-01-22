@@ -22,23 +22,23 @@
   <control id="ja_bedroom_rad" type="bbsb" device-code="a01">
     <under thermostat-id="ja_bedroom"/>
   </control>
-  <control id="loo" type="udin" device-code="5">
+  <control id="loo" type="udin" device-code="/mnt/udin/r5">
     <under thermostat-id="loo"/>
   </control>
-  <control id="utility" type="udin" device-code="7">
+  <control id="utility" type="udin" device-code="/mnt/udin/r7">
     <or>
       <under thermostat-id="utility"/>
       <over thermostat-id="dump"/>
     </or>
   </control>
-  <control id="bathroom_rad" type="udin" device-code="4">
+  <control id="bathroom_rad" type="udin" device-code="/mnt/udin/r4">
     <or>
       <under thermostat-id="bathroom"/>
       <over thermostat-id="dump"/>
     </or>
   </control>
   <!-- central heating pump -->
-  <control id="central_heating" type="udin" device-code="2">
+  <control id="central_heating" type="udin" device-code="/mnt/udin/r2">
     <or>
       <true macro-id="heating"/>
       <true macro-id="dhw"/>
@@ -46,7 +46,7 @@
     </or>
   </control>
   <!-- boiler pump + boiler -->
-  <control id="boiler" type="udin" device-code="1">
+  <control id="boiler" type="udin" device-code="/mnt/udin/r1">
     <or>
       <and>
         <on control-id="boiler"/>
@@ -63,14 +63,14 @@
     </or>
   </control>
 
-  <control id="dhw" type="udin" device-code="3">
+  <control id="dhw" type="udin" device-code="/mnt/udin/r3">
     <or>
       <true macro-id="dhw"/>
       <over thermostat-id="dump"/>
     </or>
   </control>
 
-  <control id="solar" type="udin" device-code="8">
+  <control id="solar" type="udin" device-code="/mnt/udin/r8">
     <or>
       <over thermostat-id="solar"/>
       <under thermostat-id="frost"/>

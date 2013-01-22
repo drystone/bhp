@@ -36,7 +36,7 @@ bhp. If not, see [http://www.gnu.org/licenses/].
       <xsl:with-param name="command" select="'./bhpbbsb'"/>
       <xsl:with-param name="type" select="'bbsb'"/>
     </xsl:call-template>
-    <xsl:call-template name="make-command">
+    <xsl:call-template name="make-udin-command">
       <xsl:with-param name="command" select="'./bhpudin'"/>
       <xsl:with-param name="type" select="'udin'"/>
     </xsl:call-template>
@@ -57,5 +57,17 @@ bhp. If not, see [http://www.gnu.org/licenses/].
       <xsl:value-of select="concat($command, ' ', $args, '; ')"/>
     </xsl:if>
   </xsl:template>
+
+  <xsl:template name="make-udin-command">
+    <xsl:for-each select="/control-states/control-state[@type='udin'][@last-state!=text()]">
+      <xsl:if test="text()='on'">
+        <xsl:value-of select="concat('echo 1 >', @device-code, ';')"/>
+      </xsl:if>
+      <xsl:if test="text()='off'">
+        <xsl:value-of select="concat('echo 0 >', @device-code, ';')"/>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:template>
+
 </xsl:stylesheet>
 
