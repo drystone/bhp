@@ -32,14 +32,27 @@ bhp. If not, see [http://www.gnu.org/licenses/].
       <xsl:with-param name="command" select="'./bhpfs20'"/>
       <xsl:with-param name="type" select="'fs20'"/>
     </xsl:call-template>
-    <xsl:call-template name="make-command">
-      <xsl:with-param name="command" select="'./bhpbbsb'"/>
-      <xsl:with-param name="type" select="'bbsb'"/>
-    </xsl:call-template>
-    <xsl:call-template name="make-udin-command">
-      <xsl:with-param name="command" select="'./bhpudin'"/>
-      <xsl:with-param name="type" select="'udin'"/>
-    </xsl:call-template>
+    
+    <!-- commands for udin relays -->
+    <xsl:for-each select="/control-states/control-state[@type='udin'][@last-state!=text()]">
+      <xsl:if test="text()='on'">
+        <xsl:value-of select="concat('echo 1 >', @device-code, '; ')"/>
+      </xsl:if>
+      <xsl:if test="text()='off'">
+        <xsl:value-of select="concat('echo 0 >', @device-code, '; ')"/>
+      </xsl:if>
+    </xsl:for-each>
+
+    <!-- commands for ByeByeStandby -->
+    <xsl:for-each select="/control-states/control-state[@type='bbsb'][@last-state!=text()]">
+      <xsl:if test="text()='on'">
+        <xsl:value-of select="concat('wget -q http://domia/4?3=1', @device-code, '; ')"/>
+      </xsl:if>
+      <xsl:if test="text()='off'">
+        <xsl:value-of select="concat('wget -q http://domia/4?3=0', @device-code, '; ')"/>
+      </xsl:if>
+    </xsl:for-each>
+
   </xsl:template>
 
   <xsl:template name="make-command">
@@ -51,22 +64,8 @@ bhp. If not, see [http://www.gnu.org/licenses/].
       </xsl:for-each>
     </xsl:variable>
     <xsl:if test="string-length($args)">
-      <xsl:message>
-        <xsl:value-of select="concat($command, ' ', $args, '; ')"/>
-      </xsl:message>
       <xsl:value-of select="concat($command, ' ', $args, '; ')"/>
     </xsl:if>
-  </xsl:template>
-
-  <xsl:template name="make-udin-command">
-    <xsl:for-each select="/control-states/control-state[@type='udin'][@last-state!=text()]">
-      <xsl:if test="text()='on'">
-        <xsl:value-of select="concat('echo 1 >', @device-code, ';')"/>
-      </xsl:if>
-      <xsl:if test="text()='off'">
-        <xsl:value-of select="concat('echo 0 >', @device-code, ';')"/>
-      </xsl:if>
-    </xsl:for-each>
   </xsl:template>
 
 </xsl:stylesheet>
