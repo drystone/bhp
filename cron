@@ -43,6 +43,6 @@ xsltproc control.xsl $CONFDIR/controls.xml >$TMP && mv $TMP $CSTATE
 commands=$(xsltproc actuate.xsl $CSTATE 2>/dev/null)
 if [ -n "$commands" ]; then
     echo "$DATE: $commands" >>$LOG
-    echo $commands | /bin/sh
+    (echo "set -e; $commands" | /bin/sh) || echo '<?xml version="1.0"?><empty/>' > $CSTATE
 fi
 
