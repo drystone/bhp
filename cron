@@ -37,7 +37,7 @@ done
 
 cd `dirname $0`
 ./bhpread >$TMP && mv $TMP $TEMPERATURES
-xsltproc --stringparam configdir CONFDIR targets.xsl $CONFDIR/zones.xml >$TMPDIR/targets.xml
+xsltproc --stringparam configdir $CONFDIR targets.xsl $CONFDIR/zones.xml >$TMPDIR/targets.xml
 xsltproc state.xsl $CONFDIR/thermostats.xml >$TMP && mv $TMP $STATE
 xsltproc control.xsl $CONFDIR/controls.xml >$TMP && mv $TMP $CSTATE
 commands=$(xsltproc actuate.xsl $CSTATE 2>/dev/null)
