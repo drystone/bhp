@@ -22,8 +22,9 @@ bhp. If not, see [http://www.gnu.org/licenses/].
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:date="http://exslt.org/dates-and-times" version="1.0" exclude-result-prefixes="date">
   <xsl:output method="xml" indent="yes"/>
 
-  <xsl:variable name="climates" select="document('/etc/bhp/climates.xml')/climates"/>
-  <xsl:variable name="routines" select="document('/etc/bhp/routines.xml')/routines"/>
+  <xsl:param name="configdir"/>
+
+  <xsl:variable name="routines" select="document(concat($configdir,'/routines.xml'))/routines"/>
 
   <!-- get current time and strip off zone info -->
   <xsl:variable name="now" select="substring-before(concat(date:date-time(),'+'),'+')"/>
@@ -44,12 +45,11 @@ bhp. If not, see [http://www.gnu.org/licenses/].
 
   <xsl:template name="target-temperature">
     <xsl:param name="zone"/>
-
     <!-- is there override temperature -->
     <xsl:variable name="override" select="$routines/overrides/override[@zone-id=$zone/@id][date:seconds(@end) > date:seconds($now)]"/>
     <xsl:choose>
       <xsl:when test="$override">
-        <xsl:value-of select="$climates/climate[@id=$override[position()=last()]/@climate-id]/@temperature"/>
+        <xsl:value-of select="$zone/@on"/>
       </xsl:when>
       <xsl:otherwise>
         <!-- are we in a special routine? -->
@@ -71,16 +71,7 @@ bhp. If not, see [http://www.gnu.org/licenses/].
                 </xsl:apply-templates>
               </xsl:when>
               <xsl:otherwise>
-                <!-- is there a default for the zone? -->
-                <xsl:choose>
-                  <xsl:when test="$zone/@default-climate-id">
-                    <xsl:value-of select="$climates/climate[@id=$zone/@default-climate-id]/@temperature"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <!-- use the system default -->
-                    <xsl:value-of select="$climates/climate[@default]/@temperature"/>
-                  </xsl:otherwise>
-                </xsl:choose>
+                <xsl:value-of select="$zone/@off"/>
               </xsl:otherwise>
             </xsl:choose>
           </xsl:otherwise>
@@ -95,17 +86,10 @@ bhp. If not, see [http://www.gnu.org/licenses/].
     <xsl:variable name="timer" select="timer[@zone-id=$zone/@id][($now >= date:seconds(@start) and date:seconds(@end) > $now) or ( date:seconds(@start) >= date:seconds(@end) and ($now >= date:seconds(@start) or date:seconds(@end) > $now))]"/>
     <xsl:choose>
       <xsl:when test="$timer">
-        <xsl:value-of select="$climates/climate[@id=$timer[position()=last()]/@climate-id]/@temperature"/>
+        <xsl:value-of select="$zone/@*[name()=$timer[position()=last()]/@state]"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:choose>
-          <xsl:when test="$zone/@default-climate-id">
-            <xsl:value-of select="$climates/climate[@id=$zone/@default-climate-id]/@temperature"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="$climates/climate[@default]/@temperature"/>
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:value-of select="$zone/@off"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>

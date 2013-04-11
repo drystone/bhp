@@ -1,50 +1,41 @@
 <?xml version='1.0' encoding='utf-8'?>
 <routines>
   <daily-routine id="work" name="Work">
-    <timer zone-id="sitting_room" start="PT04H45M" end="PT05H30M" climate-id="warm"/>
-    <!--timer zone-id="sitting_room" start="PT15H30M" end="PT22H" climate-id="cool"/-->
-    <timer zone-id="kitchen" start="PT06H30M" end="PT07H30M" climate-id="warm"/>
-    <timer zone-id="kitchen" start="PT17H" end="PT19H" climate-id="warm"/>
-    <timer zone-id="bathroom" start="PT05H30M" end="PT06H" climate-id="on"/>
-    <timer zone-id="bathroom" start="PT06H" end="PT08H" climate-id="hot"/>
-    <timer zone-id="bathroom" start="PT18H" end="PT20H" climate-id="hot"/>
-    <timer zone-id="bathroom" start="PT20H" end="PT20H30M" climate-id="on"/>
-    <timer zone-id="bathroom" start="PT20H30M" end="PT22H" climate-id="hot"/>
-    <timer zone-id="ja_bedroom" start="PT05H30M" end="PT06H30M" climate-id="warm"/>
-    <timer zone-id="ja_bedroom" start="PT21H30M" end="PT22H" climate-id="cool"/>
-    <timer zone-id="so_bedroom" start="PT06H30M" end="PT07H" climate-id="warm"/>
-    <timer zone-id="so_bedroom" start="PT21H00M" end="PT22H" climate-id="cool"/>
-    <timer zone-id="loo" start="PT06H30M" end="PT07H30M" climate-id="cold"/>
-    <timer zone-id="dhw" start="PT05H30M" end="PT07H" climate-id="dhw"/>
-    <timer zone-id="dhw" start="PT18H" end="PT22H" climate-id="dhw"/>
+    <timer zone-id="sitting_room" start="PT04H45M" end="PT05H30M" state="standby"/>
+    <timer zone-id="kitchen" start="PT06H00M" end="PT07H30M" state="on"/>
+    <timer zone-id="kitchen" start="PT15H30M" end="PT19H" state="standby"/>
+    <timer zone-id="bathroom" start="PT05H30M" end="PT06H" state="on"/>
+    <timer zone-id="bathroom" start="PT06H" end="PT08H" state="standby"/>
+    <timer zone-id="bathroom" start="PT15H" end="PT22H" state="standby"/>
+    <timer zone-id="ja_bedroom" start="PT05H" end="PT07H" state="standby"/>
+    <timer zone-id="ja_bedroom" start="PT21H30M" end="PT22H" state="standby"/>
+    <timer zone-id="so_bedroom" start="PT06H30M" end="PT07H30M" state="standby"/>
+    <timer zone-id="so_bedroom" start="PT21H00M" end="PT22H" state="standby"/>
+    <timer zone-id="loo" start="PT06H30M" end="PT07H30M" state="standby"/>
+    <timer zone-id="dhw" start="PT05H30M" end="PT07H" state="on"/>
+    <timer zone-id="dhw" start="PT16H" end="PT22H" state="on"/>
   </daily-routine>
   <daily-routine id="home" name="Home">
-    <!--timer zone-id="sitting_room" start="PT18H" end="PT22H" climate-id="cool"/-->
-    <timer zone-id="kitchen" start="PT08H" end="PT20H" climate-id="cool"/>
-    <timer zone-id="bathroom" start="PT07H" end="PT07H30M" climate-id="on"/>
-    <timer zone-id="bathroom" start="PT07H30M" end="PT09H" climate-id="hot"/>
-    <timer zone-id="bathroom" start="PT19H" end="PT20H" climate-id="hot"/>
-    <timer zone-id="bathroom" start="PT20H" end="PT20H30M" climate-id="on"/>
-    <timer zone-id="bathroom" start="PT20H30M" end="PT22H30M" climate-id="hot"/>
-    <timer zone-id="ja_bedroom" start="PT07H30M" end="PT09H" climate-id="cool"/>
-    <timer zone-id="ja_bedroom" start="PT22H" end="PT23H" climate-id="warm"/>
-    <timer zone-id="so_bedroom" start="PT08H" end="PT10H" climate-id="cool"/>
-    <timer zone-id="so_bedroom" start="PT21H30M" end="PT22H" climate-id="warm"/>
-    <timer zone-id="dhw" start="PT07H" end="PT09H" climate-id="dhw"/>
-    <timer zone-id="dhw" start="PT12H" end="PT15H" climate-id="dhw"/>
-    <timer zone-id="dhw" start="PT18H" end="PT22H" climate-id="dhw"/>
+    <timer zone-id="kitchen" start="PT08H" end="PT20H" state="standby"/>
+    <timer zone-id="bathroom" start="PT07H" end="PT07H30M" state="on"/>
+    <timer zone-id="bathroom" start="PT07H30M" end="PT22H30M" state="standby"/>
+    <timer zone-id="ja_bedroom" start="PT07H" end="PT09H" state="standby"/>
+    <timer zone-id="ja_bedroom" start="PT22H" end="PT23H" state="standby"/>
+    <timer zone-id="so_bedroom" start="PT08H" end="PT10H" state="standby"/>
+    <timer zone-id="so_bedroom" start="PT21H30M" end="PT22H" state="standby"/>
+    <timer zone-id="dhw" start="PT07H" end="PT09H" state="on"/>
+    <timer zone-id="dhw" start="PT12H" end="PT15H" state="on"/>
+    <timer zone-id="dhw" start="PT18H" end="PT22H" state="on"/>
   </daily-routine>
-  <daily-routine id="away" name="Away">
-    <timer zone-id="bathroom" start="PT00H" end="PT00H" climate-id="off"/>
-  </daily-routine>
+  <daily-routine id="away" name="Away"/>
   <weekly-routines>
     <weekly-routine routine-id="work" start="PT18H" end="P5DT20H"/>
     <weekly-routine routine-id="home" start="P5DT20H" end="PT18H"/>
   </weekly-routines>
   <special-routines>
-    <!--special-routine routine-id="home" start="2010-04-01T08:00:00" end="2010-04-03T12:00:00"/-->
-    <special-routine routine-id="home" start="2012-12-21T16:00:00" end="2013-01-07T16:00:00"/>
+    <special-routine routine-id="home" start="2012-03-21T16:00:00" end="2013-04-07T16:00:00"/>
   </special-routines>
-  <overrides><override zone-id="bathroom" climate-id="warm" end="2012-12-10T05:37:00"/><override zone-id="kitchen" climate-id="warm" end="2012-12-10T05:37:00"/><override zone-id="kitchen" climate-id="warm" end="2012-12-10T05:37:00"/><override zone-id="sitting_room" climate-id="warm" end="2012-12-11T06:38:00"/><override zone-id="ja_bedroom" climate-id="warm" end="2012-12-12T18:57:00"/><override zone-id="ja_bedroom" climate-id="off" end="2012-12-12T18:50:00"/><override zone-id="sitting_room" climate-id="warm" end="2012-12-14T06:34:00"/><override zone-id="sitting_room" climate-id="warm" end="2012-12-17T06:07:00"/><override zone-id="kitchen" climate-id="warm" end="2012-12-20T12:45:00"/><override zone-id="kitchen" climate-id="warm" end="2012-12-20T14:09:00"/><override zone-id="kitchen" climate-id="warm" end="2012-12-20T16:17:00"/><override zone-id="kitchen" climate-id="warm" end="2012-12-20T16:23:00"/><override zone-id="ja_bedroom" climate-id="warm" end="2012-12-24T15:20:00"/><override zone-id="ja_bedroom" climate-id="warm" end="2012-12-27T16:50:00"/><override zone-id="ja_bedroom" climate-id="cool" end="2012-12-27T17:01:00"/><override zone-id="kitchen" climate-id="hot" end="2012-12-28T17:39:00"/><override zone-id="ja_bedroom" climate-id="warm" end="2012-12-29T14:02:00"/><override zone-id="ja_bedroom" climate-id="off" end="2012-12-29T15:07:00"/><override zone-id="kitchen" climate-id="warm" end="2012-12-30T19:36:00"/><override zone-id="ja_bedroom" climate-id="warm" end="2012-12-31T10:39:00"/></overrides>
-  <!--override zone-id="bathroom" end="2010-09-26T18:00:00" climate-id="on"/-->
+  <overrides/>
+  <!--override zone-id="bathroom" end="2010-09-26T18:00:00" state="on"/-->
 </routines>
+

@@ -1,14 +1,13 @@
 <?xml version="1.0"?>
 <zones>
-  <zone id="sitting_room" name="Sitting Room"/>
-  <zone id="bathroom" name="Bathroom" default-climate-id="cool"/>
-  <zone id="passageways" name="Passageways" default-climate-id="cool"/>
-  <zone id="kitchen" name="Kitchen"/>
-  <zone id="ja_bedroom" name="John and Alex"/>
-  <zone id="so_bedroom" name="Sam and Oliver"/>
-  <zone id="study" name="Study" default-climate-id="cool"/>
-  <zone id="loo" name="Downstairs Loo" default-climate-id="off"/>
-  <zone id="utility" name="Utility Room" default-climate-id="off"/>
-  <zone id="dhw" name="DHW"/>
+  <zone id="sitting_room" name="Sitting Room"   off="10" standby="15" on="18"/>
+  <zone id="bathroom"     name="Bathroom"       off="15" standby="18" on="20"/>
+  <zone id="kitchen"      name="Kitchen"        off="10" standby="15" on="18"/>
+  <zone id="ja_bedroom"   name="Bedroom"        off="10" standby="15" on="18"/>
+  <zone id="so_bedroom"   name="Boys Room"      off="10" standby="15" on="18"/>
+  <zone id="study"        name="Study"          off="10" standby="15" on="18"/>
+  <zone id="loo"          name="Loo"            off="10" standby="15" on="18"/>
+  <zone id="utility"      name="Utility Room"   off="10" standby="15" on="18"/>
+  <zone id="dhw"          name="DHW"            off="5"  standby="30" on="50"/>
 </zones>
 
