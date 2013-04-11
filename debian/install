@@ -15,7 +15,6 @@ state.xsl               /usr/lib/bhp
 munin-thermostats.xsl   /usr/lib/bhp
 munin-controls.xsl      /usr/lib/bhp
 munin-thermometers.xsl  /usr/lib/bhp
-climates.xml            /etc/bhp
 controls.xml            /etc/bhp
 munin.xml               /etc/bhp
 routines.xml            /etc/bhp
