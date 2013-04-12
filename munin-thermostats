@@ -1,4 +1,9 @@
 #!/bin/sh
 
-/usr/bin/xsltproc --stringparam mode "$1" /usr/lib/bhp/munin-thermostats.xsl /etc/bhp/thermostats.xml
+CONFIGDIR=/etc/bhp
+RUNDIR=/var/run/bhp
+
+PARAMS="--stringparam mode $1 --stringparam rundir $RUNDIR --stringparam configdir $CONFIGDIR"
+
+/usr/bin/xsltproc $PARAMS /usr/lib/bhp/munin-thermostats.xsl $CONFIGDIR/thermostats.xml
 

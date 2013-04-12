@@ -1,8 +1,13 @@
 #!/bin/sh
 
+CONFIGDIR=/etc/bhp
+RUNDIR=/var/run/bhp
+
 # symlinked from thermometers_*
 
 class=${0##*bhp_thermometers_}
 
-/usr/bin/xsltproc --stringparam mode "$1" --stringparam class "$class" /usr/lib/bhp/munin-thermometers.xsl /etc/bhp/thermometers.xml
+PARAMS="--stringparam mode $1 --stringparam class $class --stringparam rundir $RUNDIR --stringparam configdir $CONFIGDIR"
+
+/usr/bin/xsltproc $PARAMS /usr/lib/bhp/munin-thermometers.xsl $CONFIGDIR/thermometers.xml
 

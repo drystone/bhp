@@ -1,5 +1,4 @@
 cron                    /usr/lib/bhp
-bhpread                 /usr/lib/bhp
 gettemps                /usr/lib/bhp
 bhpweb                  /usr/lib/bhp
 bhpx10                  /usr/lib/bhp

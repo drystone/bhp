@@ -23,9 +23,9 @@ bhp. If not, see [http://www.gnu.org/licenses/].
 
   <xsl:output method="xml" indent="yes"/>
 
-  <xsl:variable name="temperatures" select="document('/tmp/bhp/temperatures.xml')/temperatures"/>
-  <xsl:variable name="targets" select="document('/tmp/bhp/targets.xml')/targets"/>
-  <xsl:variable name="old" select="document('/tmp/bhp/state.xml')/thermostat-states/thermostat-state"/>
+  <xsl:variable name="temperatures" select="document(concat($rundir, '/temperatures.xml'))/temperatures"/>
+  <xsl:variable name="targets" select="document(concat($rundir, '/targets.xml'))/targets"/>
+  <xsl:variable name="old" select="document(concat($rundir, '/state.xml'))/thermostat-states/thermostat-state"/>
 
   <xsl:template match="thermostats">
     <thermostat-states>

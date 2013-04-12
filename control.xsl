@@ -23,7 +23,9 @@ bhp. If not, see [http://www.gnu.org/licenses/].
 
   <xsl:output method="xml" indent="yes"/>
 
-  <xsl:variable name="old" select="document('/tmp/bhp/control-state.xml')/control-states/control-state"/>
+  <xsl:param name="rundir"/>
+
+  <xsl:variable name="old" select="document(concat($rundir, '/control-state.xml'))/control-states/control-state"/>
 
   <xsl:template match="controls">
     <control-states>
@@ -45,7 +47,7 @@ bhp. If not, see [http://www.gnu.org/licenses/].
 
   <xsl:template match="under|over">
     <xsl:choose>
-      <xsl:when test="document('/tmp/bhp/state.xml')/thermostat-states/thermostat-state[@thermostat-id=current()/@thermostat-id] = local-name()">true</xsl:when>
+      <xsl:when test="document(concat($rundir, '/state.xml'))/thermostat-states/thermostat-state[@thermostat-id=current()/@thermostat-id] = local-name()">true</xsl:when>
       <xsl:otherwise>false</xsl:otherwise>
     </xsl:choose>
   </xsl:template>

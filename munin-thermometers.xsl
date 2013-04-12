@@ -54,7 +54,7 @@ bhp. If not, see [http://www.gnu.org/licenses/].
   <xsl:template match="thermometer">
     <xsl:choose>
       <xsl:when test="$mode='config'">
-        <xsl:variable name="colour" select="document('/etc/bhp/munin.xml')/colours/colour[@id=current()/@id]"/>
+        <xsl:variable name="colour" select="document(concat($configdir, '/munin.xml'))/colours/colour[@id=current()/@id]"/>
         <xsl:value-of select="concat(@id,'.label ', @name, $newline)"/>
         <xsl:if test="$colour">
           <xsl:value-of select="concat(@id,'.colour ', $colour, $newline)"/>
@@ -62,7 +62,7 @@ bhp. If not, see [http://www.gnu.org/licenses/].
       </xsl:when>
       <xsl:otherwise>
         <xsl:variable name="id" select="@id"/>
-        <xsl:value-of select="concat($id,'.value ',document('/tmp/bhp/temperatures.xml')/temperatures/temperature[@thermometer-id=$id],$newline)"/>
+        <xsl:value-of select="concat($id,'.value ',document(concat($rundir, '/temperatures.xml'))/temperatures/temperature[@thermometer-id=$id],$newline)"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>

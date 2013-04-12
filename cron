@@ -16,17 +16,22 @@
 # You should have received a copy of the GNU General Public License along with
 # bhp. If not, see <http://www.gnu.org/licenses/>.
 
-TMPDIR=/tmp/bhp
-TMP=$TMPDIR/.tmp
-TEMPERATURES=$TMPDIR/temperatures.xml
-STATE=$TMPDIR/state.xml
-CSTATE=$TMPDIR/control-state.xml
+CONFIGDIR=/etc/bhp
+DATADIR=/var/lib/bhp
+RUNDIR=/var/run/bhp
+TMP=$RUNDIR/.tmp
+TEMPERATURES=$RUNDIR/temperatures.xml
+STATE=$RUNDIR/state.xml
+CSTATE=$RUNDIR/control-state.xml
 LOG=/var/log/bhplog
 DATE=`date -R`
-CONFDIR=/etc/bhp
 
-if [ ! -e $TMPDIR ]; then
-  mkdir -p $TMPDIR
+if [ ! -e $RUNDIR ]; then
+  mkdir -p $RUNDIR
+fi
+
+if [ ! -e $DATADIR ]; then
+  mkdir -p $DATADIR
 fi
 
 for file in $TEMPERATURES $STATE $CSTATE; do
@@ -36,10 +41,10 @@ for file in $TEMPERATURES $STATE $CSTATE; do
 done
 
 cd `dirname $0`
-./bhpread >$TMP && mv $TMP $TEMPERATURES
-xsltproc --stringparam configdir $CONFDIR targets.xsl $CONFDIR/zones.xml >$TMPDIR/targets.xml
-xsltproc state.xsl $CONFDIR/thermostats.xml >$TMP && mv $TMP $STATE
-xsltproc control.xsl $CONFDIR/controls.xml >$TMP && mv $TMP $CSTATE
+./gettemps | xsltproc --stringparam rundir $RUNDIR --stringparam configdir $CONFIGDIR bhpread.xsl - >$TMP && mv $TMP $TEMPERATURES
+xsltproc --stringparam configdir $CONFIGDIR targets.xsl $CONFIGDIR/zones.xml >$RUNDIR/targets.xml
+xsltproc --stringparam rundir $RUNDIR state.xsl $CONFIGDIR/thermostats.xml >$TMP && mv $TMP $STATE
+xsltproc --stringparam rundir $RUNDIR control.xsl $CONFIGDIR/controls.xml >$TMP && mv $TMP $CSTATE
 commands=$(xsltproc actuate.xsl $CSTATE 2>/dev/null)
 if [ -n "$commands" ]; then
     echo "$DATE: $commands" >>$LOG

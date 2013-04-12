@@ -27,6 +27,8 @@ bhp. If not, see [http://www.gnu.org/licenses/].
 </xsl:text>
   </xsl:variable>
 
+  <xsl:param name="configdir"/>
+  <xsl:param name="rundir"/>
   <xsl:param name="mode"/>
 
   <xsl:template match="controls">
@@ -40,7 +42,7 @@ bhp. If not, see [http://www.gnu.org/licenses/].
   <xsl:template match="control">
     <xsl:choose>
       <xsl:when test="$mode='config'">
-        <xsl:variable name="colour" select="document('/etc/bhp/munin.xml')/colours/colour[@id=current()/@id]"/>
+        <xsl:variable name="colour" select="document(concat($configdir, '/munin.xml'))/colours/colour[@id=current()/@id]"/>
         <xsl:value-of select="concat(@id,'.label ', @id, $newline)"/>
         <xsl:if test="$colour">
           <xsl:value-of select="concat(@id,'.colour ', $colour, $newline)"/>
@@ -50,7 +52,7 @@ bhp. If not, see [http://www.gnu.org/licenses/].
         <xsl:variable name="binary-state">
           <xsl:variable name="id" select="@id"/>
           <xsl:choose>
-            <xsl:when test="document('/tmp/bhp/control-state.xml')/control-states/control-state[@id=$id]/text()='on'">1</xsl:when>
+            <xsl:when test="document(concat($rundir, '/control-state.xml'))/control-states/control-state[@id=$id]/text()='on'">1</xsl:when>
             <xsl:otherwise>0</xsl:otherwise>
           </xsl:choose>
         </xsl:variable>

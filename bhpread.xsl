@@ -22,9 +22,13 @@ bhp. If not, see [http://www.gnu.org/licenses/].
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 	<xsl:output method="xml" indent="yes"/>
+
+  <xsl:param name="rundir"/>
+  <xsl:param name="configdir"/>
+
   <xsl:variable name="new" select="/temperatures"/>
-  <xsl:variable name="old" select="document('/tmp/bhp/temperatures.xml')/temperatures"/>
-  <xsl:variable name="thermometers" select="document('/etc/bhp/thermometers.xml')/thermometers"/>
+  <xsl:variable name="old" select="document(concat($rundir, '/temperatures.xml'))/temperatures"/>
+  <xsl:variable name="thermometers" select="document(concat($configdir, '/thermometers.xml'))/thermometers"/>
 
   <xsl:template match="/">
     <temperatures>
