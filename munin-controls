@@ -3,7 +3,7 @@
 CONFIGDIR=/etc/bhp
 RUNDIR=/var/run/bhp
 
-PARAMS="--stringparam mode $1 --stringparam rundir $RUNDIR --stringparam configdir $CONFIGDIR"
+PARAMS="--param mode \"$1\" --stringparam rundir $RUNDIR --stringparam configdir $CONFIGDIR"
 
 /usr/bin/xsltproc $PARAMS /usr/lib/bhp/munin-controls.xsl $CONFIGDIR/controls.xml
 

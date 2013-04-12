@@ -7,7 +7,7 @@ RUNDIR=/var/run/bhp
 
 class=${0##*bhp_thermometers_}
 
-PARAMS="--stringparam mode $1 --stringparam class $class --stringparam rundir $RUNDIR --stringparam configdir $CONFIGDIR"
+PARAMS="--param mode \"$1\" --param class \"$class\" --stringparam rundir $RUNDIR --stringparam configdir $CONFIGDIR"
 
 /usr/bin/xsltproc $PARAMS /usr/lib/bhp/munin-thermometers.xsl $CONFIGDIR/thermometers.xml
 
