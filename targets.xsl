@@ -23,8 +23,10 @@ bhp. If not, see [http://www.gnu.org/licenses/].
   <xsl:output method="xml" indent="yes"/>
 
   <xsl:param name="configdir"/>
+  <xsl:param name="datadir"/>
 
   <xsl:variable name="routines" select="document(concat($configdir,'/routines.xml'))/routines"/>
+  <xsl:variable name="overrides" select="document(concat($datadir,'/overrides.xml'))/overrides"/>
 
   <!-- get current time and strip off zone info -->
   <xsl:variable name="now" select="substring-before(concat(date:date-time(),'+'),'+')"/>
@@ -46,10 +48,10 @@ bhp. If not, see [http://www.gnu.org/licenses/].
   <xsl:template name="target-temperature">
     <xsl:param name="zone"/>
     <!-- is there override temperature -->
-    <xsl:variable name="override" select="$routines/overrides/override[@zone-id=$zone/@id][date:seconds(@end) > date:seconds($now)]"/>
+    <xsl:variable name="override" select="$overrides/override[@zone-id=$zone/@id][date:seconds(@end) > date:seconds($now)]"/>
     <xsl:choose>
       <xsl:when test="$override">
-        <xsl:value-of select="$zone/@on"/>
+        <xsl:value-of select="$override/@state"/>
       </xsl:when>
       <xsl:otherwise>
         <!-- are we in a special routine? -->

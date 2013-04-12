@@ -23,6 +23,7 @@ TMP=$RUNDIR/.tmp
 TEMPERATURES=$RUNDIR/temperatures.xml
 STATE=$RUNDIR/state.xml
 CSTATE=$RUNDIR/control-state.xml
+OVERRIDES=$DATADIR/overrides.xml
 LOG=/var/log/bhplog
 DATE=`date -R`
 
@@ -34,7 +35,7 @@ if [ ! -e $DATADIR ]; then
   mkdir -p $DATADIR
 fi
 
-for file in $TEMPERATURES $STATE $CSTATE; do
+for file in $TEMPERATURES $STATE $CSTATE $OVERRIDES; do
   if [ ! -e $file ]; then
     echo '<?xml version="1.0"?><empty/>' > $file
   fi
@@ -42,7 +43,7 @@ done
 
 cd `dirname $0`
 ./gettemps | xsltproc --stringparam rundir $RUNDIR --stringparam configdir $CONFIGDIR bhpread.xsl - >$TMP && mv $TMP $TEMPERATURES
-xsltproc --stringparam configdir $CONFIGDIR targets.xsl $CONFIGDIR/zones.xml >$RUNDIR/targets.xml
+xsltproc --stringparam configdir $CONFIGDIR --stringparam datadir $DATADIR targets.xsl $CONFIGDIR/zones.xml >$RUNDIR/targets.xml
 xsltproc --stringparam rundir $RUNDIR state.xsl $CONFIGDIR/thermostats.xml >$TMP && mv $TMP $STATE
 xsltproc --stringparam rundir $RUNDIR control.xsl $CONFIGDIR/controls.xml >$TMP && mv $TMP $CSTATE
 commands=$(xsltproc actuate.xsl $CSTATE 2>/dev/null)
