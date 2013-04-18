@@ -48,10 +48,10 @@ bhp. If not, see [http://www.gnu.org/licenses/].
   <xsl:template name="target-temperature">
     <xsl:param name="zone"/>
     <!-- is there override temperature -->
-    <xsl:variable name="override" select="$overrides/override[@zone-id=$zone/@id][date:seconds(@end) > date:seconds($now)]"/>
+    <xsl:variable name="override" select="$overrides/override[@zone-id=$zone/@id][position()=last()][date:seconds(@end) > date:seconds($now)]"/>
     <xsl:choose>
       <xsl:when test="$override">
-        <xsl:value-of select="$override/@state"/>
+        <xsl:value-of select="$zone/@*[name()=$override/@state]"/>
       </xsl:when>
       <xsl:otherwise>
         <!-- are we in a special routine? -->
