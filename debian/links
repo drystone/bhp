@@ -1,4 +1,0 @@
-/usr/lib/bhp/munin-thermometers /etc/munin/plugins/bhp_thermometers_room
-/usr/lib/bhp/munin-thermometers /etc/munin/plugins/bhp_thermometers_system
-/usr/lib/bhp/munin-thermostats /etc/munin/plugins/bhp_thermostats
-/usr/lib/bhp/munin-controls /etc/munin/plugins/bhp_controls
