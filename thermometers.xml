@@ -1,19 +1,19 @@
 <?xml version="1.0"?>
 <thermometers>
-  <thermometer device-id="10456CCB01080025" id="sitting_room" name="Sitting Room" correction="-0.6" munin-class="room"/>
-  <thermometer device-id="104570CB01080078" id="so_bedroom" name="Sam and Oliver" correction="1.5" munin-class="room"/>
-  <thermometer device-id="106F5DCB01080015" id="bathroom" name="Bathroom" correction="0.5" munin-class="room"/>
-  <thermometer device-id="289D433C02000057" id="ja_bedroom" name="John and Alex" munin-class="room"/>
-  <thermometer device-id="28AB283C02000069" id="loo" name="Downstairs Loo" munin-class="room"/>
-  <thermometer device-id="28914F3C0200000B" id="utility" name="Utility Room" munin-class="room"/>
-  <thermometer device-id="280F543C020000A5" id="back_passage" name="Back Passage" munin-class="room"/>
-  <thermometer device-id="107C2BCB010800E6" id="office" name="Office" munin-class="room"/>
-  <thermometer device-id="28F05E3C0200004E" id="tank_middle" name="Tank Middle" munin-class="system"/>
-  <thermometer device-id="28A23B3C020000CD" id="tank_bottom" name="Tank Bottom" munin-class="system"/>
-  <thermometer device-id="2846393C020000BB" id="tank_top" name="Tank Top" munin-class="system"/>
-  <thermometer device-id="280F81240200000D" id="dhw" name="DHW" munin-class="system"/>
-  <thermometer device-id="108192130208009B" id="solar" name="Solar Panel" munin-class="system"/>
-  <thermometer device-id="9682" id="kitchen" name="Kitchen" munin-class="room"/>
-  <thermometer device-id="9696" id="study" name="Study" munin-class="room"/>
+  <thermometer type="1wire" device-id="10456CCB01080025" id="sitting_room" name="Sitting Room" correction="-0.6" munin-class="room"/>
+  <thermometer type="1wire" device-id="104570CB01080078" id="so_bedroom" name="Sam and Oliver" correction="1.5" munin-class="room"/>
+  <thermometer type="1wire" device-id="106F5DCB01080015" id="bathroom" name="Bathroom" correction="0.5" munin-class="room"/>
+  <thermometer type="1wire" device-id="289D433C02000057" id="ja_bedroom" name="John and Alex" munin-class="room"/>
+  <thermometer type="1wire" device-id="28AB283C02000069" id="loo" name="Downstairs Loo" munin-class="room"/>
+  <thermometer type="1wire" device-id="28914F3C0200000B" id="utility" name="Utility Room" munin-class="room"/>
+  <thermometer type="1wire" device-id="280F543C020000A5" id="back_passage" name="Back Passage" munin-class="room"/>
+  <thermometer type="1wire" device-id="107C2BCB010800E6" id="office" name="Office" munin-class="room"/>
+  <thermometer type="1wire" device-id="28F05E3C0200004E" id="tank_middle" name="Tank Middle" munin-class="system"/>
+  <thermometer type="1wire" device-id="28A23B3C020000CD" id="tank_bottom" name="Tank Bottom" munin-class="system"/>
+  <thermometer type="1wire" device-id="2846393C020000BB" id="tank_top" name="Tank Top" munin-class="system"/>
+  <thermometer type="1wire" device-id="280F81240200000D" id="dhw" name="DHW" munin-class="system"/>
+  <thermometer type="1wire" device-id="108192130208009B" id="solar" name="Solar Panel" munin-class="system"/>
+  <thermometer type="arexx" device-id="9682" id="kitchen" name="Kitchen" munin-class="room"/>
+  <thermometer type="arexx" device-id="9696" id="study" name="Study" munin-class="room"/>
 </thermometers>
 
