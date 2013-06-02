@@ -1,25 +1,25 @@
 <?xml version="1.0"?>
 
 <controls>
-  <control id="sitting_room_rad" type="fs20" device-code="1334">
+  <control id="sitting_room_rad" type="fht8v" device-code="1334">
     <or>
       <under thermostat-id="sitting_room"/>
       <over thermostat-id="dump"/>
     </or>
   </control>
-  <control id="kitchen_rad" type="fs20" device-code="1234">
+  <control id="kitchen_rad" type="fht8v" device-code="1234">
     <or>
       <under thermostat-id="kitchen"/>
       <over thermostat-id="dump"/>
     </or>
   </control>
-  <control id="study_rad" type="fs20" device-code="1434">
+  <control id="study_rad" type="fht8v" device-code="1434">
     <under thermostat-id="study"/>
   </control>
-  <control id="so_bedroom_rad" type="fs20" device-code="1534">
+  <control id="so_bedroom_rad" type="fht8v" device-code="1534">
     <under thermostat-id="so_bedroom"/>
   </control>
-  <control id="ja_bedroom_rad" type="bbsb" device-code="a01">
+  <control id="ja_bedroom_rad" type="fht8v" device-code="1634">
     <under thermostat-id="ja_bedroom"/>
   </control>
   <control id="loo" type="udin" device-code="/mnt/udin/r5">
