@@ -15,7 +15,8 @@ main = do
     overrides <- loadOverrides "overrides.xml" zones
     thermometers <- loadThermometers "thermometers.xml" "/mnt/1wire" "/mnt/arexx"
     thermostats <- loadThermostats "thermostats.xml" thermometers routines overrides
-    controls <- loadControls "controls.xml" thermostats
+    controls <- loadControls "controls.xml" "/mnt/udin" "/mnt/fht8v" thermostats
+    putStrLn $ show controls
     loop controls
 
 loop :: Controls -> IO ()

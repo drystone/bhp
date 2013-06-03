@@ -28,6 +28,7 @@ data Routines = Routines
     { routinesRoutines  :: Map.Map RoutineId Routine
     , routinesSelectors :: [RoutineSelector]
     }
+    deriving (Show)
 
 loadRoutines file zones = do
     routinesEls <- fmap (rootChildren . parseXML) (readFile file)

@@ -18,20 +18,12 @@ type Controls = [Control]
 type ControlId = String
 type ControlDeviceId = String
 
-data ControlType    = ControlTypeFht8v
-                    | ControlTypeUdin
-    deriving (Show)
-
 data ControlState   = ControlStateOn
                     | ControlStateOff
     deriving (Eq, Show)
 
-readControlType "fht8v" = ControlTypeFht8v
-readControlType "udin"  = ControlTypeUdin
-
 data Control = Control
-    { controlType       :: ControlType
-    , controlDeviceId   :: ControlDeviceId
+    { controlDevicePath :: ControlDeviceId
     , controlCondition  :: ControlCondition }
     deriving (Show)
 
@@ -42,13 +34,12 @@ data ControlCondition = ControlConditionNot ControlCondition
                       | ControlConditionOn Control
     deriving (Show)
 
-loadControls file thermostats = do
+loadControls file udinPath fht8vPath thermostats = do
     str <- readFile file
     let rootEl = last $ onlyElems $ parseXML str
     return $ map (extractControl rootEl) (findControlEls rootEl)
   where extractControl rootEl el = Control
-            { controlType       = readControlType $ attr "type" el
-            , controlDeviceId   = attr "device-code" el
+            { controlDevicePath = controlDevicePath (attr "type" el) (attr "device-code" el)
             , controlCondition  = extractCondition rootEl $ head $ elChildren el }
         extractCondition rootEl el = case qName $ elName el of
             "not"   -> ControlConditionNot $ extractCondition rootEl (head $ elChildren el)
@@ -61,6 +52,8 @@ loadControls file thermostats = do
             "true"  -> extractMacro rootEl $ findMacroEl (attr "macro-id" el) rootEl
             "false" -> ControlConditionNot $ extractMacro rootEl $ findMacroEl (attr "macro-id" el) rootEl
         extractMacro rootEl el = extractCondition rootEl (head $ elChildren el)
+        controlDevicePath "udin"  id = udinPath ++ ('/':id)
+        controlDevicePath "fht8v" id = fht8vPath ++ ('/':id)
 
 evalCondition (ControlConditionNot c) = fmap not (evalCondition c)
 evalCondition (ControlConditionOr cs) = fmap (True `elem`) (mapM evalCondition cs)
@@ -74,5 +67,16 @@ findControlEl id rootEl = fromJust $ find (\e -> attr "id" e == id) $ findContro
 findMacroEls = filterChildren (\e -> qName (elName e) == "macro") 
 findMacroEl id rootEl = fromJust $ find (\e -> attr "id" e == id) $ findMacroEls rootEl
 
-updateControls controls routines = 4
-testControl control = return True
+updateControls = map actuate
+  where actuate c = do
+            state <- evalCondition (controlCondition c)
+            if state then
+                writeFile (controlDevicePath c) "1"
+            else
+                writeFile (controlDevicePath c) "0"
+
+testControl control = do
+    state <- readFile (controlDevicePath control)
+    case state of
+        ('1':_) -> return True
+        _       -> return False
