@@ -86,7 +86,14 @@ timerTarget (Timer {timerStart=s, timerEnd=e, timerSetting=set}:ts) = do
 timerTarget _ = return Nothing
 
 -- is current time within range
+-- if TimerDaily or TimerWeekly then s>e means rollover from s -> midnight/newweek -> e
 boundedTimer :: TimerTime -> TimerTime -> IO Bool
+boundedTimer s@(TimerAbsolute _) e@(TimerAbsolute _) = do
+    st <- time s
+    et <- time e
+    ct <- getCurrentTime
+    return (st <= ct && ct < et)
+    
 boundedTimer s e = do
     st <- time s
     et <- time e
