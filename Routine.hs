@@ -38,18 +38,19 @@ loadRoutines file zones = do
         }
 
 extractRoutines es zones = foldr extractRoutine Map.empty (filterElems "daily-routine" es)
-  where extractRoutine e = Map.insert (attr "id" e) (foldr extractTimer defaults (elChildren e))
+  where extractRoutine e = Map.insert (attr "id" e) (insertDefaults (foldr extractTimer Map.empty (elChildren e)))
         extractTimer e m = Map.insert zid (Timer
             { timerStart        = TimerDaily (duration $ attr "start" e)
             , timerEnd          = TimerDaily (duration $ attr "end" e)
             , timerSetting      = Left (zoneTemperature (attr "state" e) (fromJust $ Map.lookup zid zones))}
             : Map.findWithDefault [] zid m) m
           where zid = attr "zone-id" e
-        defaults = Map.map (\v -> [defaultTimer { timerSetting = Left $ zoneDefault v }]) zones
-        defaultTimer = Timer
-            { timerStart = TimerDaily 0
-            , timerEnd = TimerDaily 0
-            , timerSetting = Left 0 }
+        insertDefaults timerMap = foldr insertDefault Map.empty (Map.toList zones)
+          where insertDefault (k, z) m = Map.insert k (defaultTimer {timerSetting = Left $ zoneDefault z} : (Map.findWithDefault [] k timerMap)) m
+                defaultTimer = Timer
+                    { timerStart = TimerDaily 0
+                    , timerEnd = TimerDaily 0
+                    , timerSetting = Left 0 }
 
 extractWeeklyRoutines es = concatMap (map extract . elChildren) $ filterElems "weekly-routines" es
   where extract e = RoutineSelector
