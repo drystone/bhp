@@ -1,7 +1,7 @@
 module Zone
     (
       ZoneId
-    , Zone
+    , Zone(zoneDefault)
     , loadZones
     , zoneTemperature
     ) where
@@ -18,6 +18,7 @@ data Zone = Zone
     { zoneOff       :: Temperature
     , zoneStandby   :: Temperature
     , zoneOn        :: Temperature
+    , zoneDefault   :: Temperature
     } deriving (Show)
 
 loadZones filename = do
@@ -27,6 +28,7 @@ loadZones filename = do
             { zoneOff       = read $ attr "off" e
             , zoneStandby   = read $ attr "standby" e
             , zoneOn        = read $ attr "on" e
+            , zoneDefault   = read $ attr "off" e   -- TODO allow default value in zones.xml
             }
 
 zoneTemperature "off"       = zoneOff

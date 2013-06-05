@@ -10,7 +10,7 @@ module Thermostat
 import Text.XML.Light (parseXML, findAttr)
 import Text.XML.Light.Types (QName(..))
 import qualified Data.Map as Map
-import Data.Maybe (fromJust)
+import Data.Maybe (fromJust, fromMaybe)
 
 import Xml
 import Thermometer
@@ -26,21 +26,33 @@ data ThermostatTarget = TimerTarget [Timer]
     deriving (Show)
 
 data Thermostat = Thermostat
-    { thermostatThermometer     :: Thermometer
-    , thermostatTarget          :: ThermostatTarget }
+    { thermostatId              :: ThermostatId
+    , thermostatThermometer     :: Thermometer
+    , thermostatTarget          :: ThermostatTarget
+    , thermostatFailsafe        :: Bool
+    , thermostatOffset          :: Float
+    }
     deriving (Show)
 
 loadThermostats file thermometers routines overrides = do
     str <- readFile file
     return $ foldr extract Map.empty (rootChildren $ parseXML str)
-  where extract e = Map.insert (attr "id" e) Thermostat
-            { thermostatThermometer = fromJust $ Map.lookup (attr "thermometer-id" e) thermometers
+  where extract e = Map.insert id Thermostat
+            { thermostatId          = id
+            , thermostatThermometer = fromJust $ Map.lookup (attr "thermometer-id" e) thermometers
             , thermostatTarget      = target
                 (findAttr (QName "zone-id" Nothing Nothing) e)
                 (findAttr (QName "temperature" Nothing Nothing) e)
                 (findAttr (QName "target-thermometer-id" Nothing Nothing) e)
+            , thermostatFailsafe    = 
+                case findAttr (QName "failsafe" Nothing Nothing) e of
+                    Nothing -> True
+                    Just "over" -> True
+                    Just "under" -> False
+            , thermostatOffset      = read $ fromMaybe "0" (findAttr (QName "offset" Nothing Nothing) e)
             }
-          where target (Just zid) _ _           = TimerTarget (zoneTimers zid routines overrides)
+          where id = attr "id" e
+                target (Just zid) _ _           = TimerTarget (zoneTimers zid routines overrides)
                 target _ (Just temp) _          = TemperatureTarget $ read temp
                 target _ _ (Just thermometerId) = ThermometerTarget $ fromJust $ Map.lookup thermometerId thermometers
 
@@ -53,15 +65,19 @@ zoneTimers zid routines overrides =
             }) (routinesSelectors routines)
         overrideTimers = Map.findWithDefault [] zid overrides
 
-testThermostat Thermostat {thermostatThermometer=thermometer, thermostatTarget=(TimerTarget target)} = do
-    temperature <- readThermometer thermometer
-    targetTemperature <- timerTarget target
-    return (temperature > targetTemperature)
-testThermostat Thermostat {thermostatThermometer=thermometer, thermostatTarget=(ThermometerTarget target)} = do
-    temperature <- readThermometer thermometer
-    targetTemperature <- readThermometer target
-    return (temperature > targetTemperature)
-testThermostat Thermostat {thermostatThermometer=thermometer, thermostatTarget=(TemperatureTarget target)} = do
-    temperature <- readThermometer thermometer
-    return (temperature > target)
-
+testThermostat stat = do
+    mt <- readThermometer $ thermostatThermometer stat
+    case mt of
+        Nothing   -> log "failed" "unknown" >> return (thermostatFailsafe stat)
+        Just temp -> do
+            let offset = thermostatOffset stat
+            target <- getTarget $ thermostatTarget stat
+            case target of
+                Nothing -> log (show (temp+offset)) "failed" >> return (thermostatFailsafe stat)
+                Just tt -> do
+                    log (show (temp+offset)) (show tt)
+                    return (temp+offset > tt)
+  where getTarget (TimerTarget tt)       = timerTarget tt
+        getTarget (ThermometerTarget tt) = readThermometer tt
+        getTarget (TemperatureTarget tt) = return $ Just tt
+        log cur tgt = putStrLn ("Thermostat id: " ++ thermostatId stat ++ ", current: " ++ cur ++ ", target: " ++ tgt)
