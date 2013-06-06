@@ -54,13 +54,15 @@ loadThermostats file routines overrides = do
     target _ _ (Just thermometerId) = ThermometerTarget thermometerId
 
 zoneTimers zid routines overrides =
-    routineSelectors ++ overrideTimers
+    routineSelectors ++ overrideTimer
   where routineSelectors = map (\s -> Timer
             { timerStart    = selectorStart s
             , timerEnd      = selectorEnd s
             , timerSetting  = Right $ Map.findWithDefault [] zid (fromJust $ Map.lookup (selectorRoutineId s) (routinesRoutines routines))
             }) (routinesSelectors routines)
-        overrideTimers = Map.findWithDefault [] zid overrides
+        overrideTimer = case Map.lookup zid overrides of
+            Nothing -> []
+            Just t -> [t]
 
 testThermostats temperatures = foldM fn Map.empty
   where fn m s = testThermostat temperatures s >>= \result -> return $ Map.insert (thermostatId s) result m
