@@ -2,10 +2,10 @@ module Thermostat
     ( ThermostatId
     , loadThermostats
     , testThermostats
+    , getThermostatStateXml
     ) where
 
-import Text.XML.Light (parseXML, findAttr)
-import Text.XML.Light.Types (QName(..))
+import qualified Text.XML.Light as X
 import qualified Data.Map as Map
 import Data.Maybe (fromJust, fromMaybe)
 import Control.Monad (foldM)
@@ -38,16 +38,16 @@ loadThermostats file routines overrides = do
         { thermostatId = attr "id" e
         , thermostatThermometer = attr "thermometer-id" e
         , thermostatTarget = target
-            (findAttr (QName "zone-id" Nothing Nothing) e)
-            (findAttr (QName "temperature" Nothing Nothing) e)
-            (findAttr (QName "target-thermometer-id" Nothing Nothing) e)
+            (X.findAttr (X.QName "zone-id" Nothing Nothing) e)
+            (X.findAttr (X.QName "temperature" Nothing Nothing) e)
+            (X.findAttr (X.QName "target-thermometer-id" Nothing Nothing) e)
         , thermostatFailsafe = 
-            case findAttr (QName "failsafe" Nothing Nothing) e of
+            case X.findAttr (X.QName "failsafe" Nothing Nothing) e of
                 Nothing -> True
                 Just "over" -> True
                 Just "under" -> False
-        , thermostatOffset = read $ fromMaybe "0" (findAttr (QName "offset" Nothing Nothing) e)
-        } | e <- rootChildren $ parseXML str]
+        , thermostatOffset = read $ fromMaybe "0" (X.findAttr (X.QName "offset" Nothing Nothing) e)
+        } | e <- rootChildren $ X.parseXML str]
   where
     target (Just zid) _ _           = TimerTarget (zoneTimers zid routines overrides)
     target _ (Just temp) _          = TemperatureTarget (read temp)
@@ -80,3 +80,11 @@ testThermostat temperatures stat =
         getTarget (TemperatureTarget tt) = return $ Just tt
         log cur tgt = putStrLn ("Thermostat id: " ++ thermostatId stat ++ ", current: " ++ cur ++ ", target: " ++ tgt)
 
+getThermostatStateXml :: Map.Map ThermostatId Bool -> String
+getThermostatStateXml ts = 
+    X.ppTopElement $ X.Element (X.QName "thermostat-states" Nothing Nothing) [] 
+        [X.Elem (X.Element (X.QName "thermostat-state" Nothing Nothing) 
+            [ X.Attr (X.QName "thermostat-id" Nothing Nothing) (fst t)]
+            [ X.Text (X.CData X.CDataText (if snd t then "over" else "under") Nothing) ]
+            Nothing)
+        | t <- Map.toList ts] Nothing

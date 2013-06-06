@@ -87,20 +87,11 @@ timerTarget _ = return Nothing
 
 -- is current time within range
 -- if TimerDaily or TimerWeekly then s>e means rollover from s -> midnight/newweek -> e
-boundedTimer :: TimerTime -> TimerTime -> IO Bool
-boundedTimer s@(TimerAbsolute _) e@(TimerAbsolute _) = do
-    st <- time s
-    et <- time e
-    ct <- getCurrentTime
-    return (st <= ct && ct < et)
-    
 boundedTimer s e = do
     st <- time s
     et <- time e
     ct <- getCurrentTime
-    return (if st < et then
-                st <= ct && ct < et
-            else
-                st <= ct || ct < et)
-        
+    return $ test s st et ct
+  where test (TimerAbsolute _) s e c = s <= c && c < e
+        test _ s e c                 = s <= c && c < e || (e <= s && (s < c || c < e))
 

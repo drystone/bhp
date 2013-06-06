@@ -6,6 +6,8 @@ import System.Exit (exitSuccess)
 import Data.List (intercalate)
 import Control.Concurrent (threadDelay)
 import Control.Monad (forever)
+import System.Directory (renameFile)
+import qualified Data.ByteString.Char8 as BS
 
 import Thermometer
 import Zone
@@ -110,12 +112,23 @@ main = do
     thermometers <- loadThermometers (configDir ++ "/thermometers.xml") owDir arexxDir
     thermostats <- loadThermostats (configDir ++ "/thermostats.xml") routines overrides
     controls <- loadControls (configDir ++ "/controls.xml") udinDir fht8vDir
-    forever (loop thermometers thermostats controls)
+    forever (loop thermometers thermostats controls runDir)
   where
-    loop thermometers thermostats controls = do
+    loop thermometers thermostats controls runDir = do
         temperatures <- readThermometers thermometers
+        saveState runDir "temperatures.xml" $ getTemperatureXml temperatures
         thermostatStates <- testThermostats temperatures thermostats
+        saveState runDir "state.xml" $ getThermostatStateXml thermostatStates
         controlStates <- evalControlConditions thermostatStates controls
+        saveState runDir "control-state.xml" $ getControlStateXml controlStates
         actuateControls controlStates controls
         threadDelay 5000000
         return ()
+
+saveState :: FilePath -> FilePath -> String -> IO ()
+saveState dir fnam s = do
+    BS.writeFile tnam (BS.pack s)
+    renameFile tnam (dir ++ ('/':fnam))
+  where
+    tnam = dir ++ "/.bhp.tmp"
+ 

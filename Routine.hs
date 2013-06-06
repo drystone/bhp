@@ -46,7 +46,7 @@ extractRoutines es zones = foldr extractRoutine Map.empty (filterElems "daily-ro
             : Map.findWithDefault [] zid m) m
           where zid = attr "zone-id" e
         insertDefaults timerMap = foldr insertDefault Map.empty (Map.toList zones)
-          where insertDefault (k, z) m = Map.insert k (defaultTimer {timerSetting = Left $ zoneDefault z} : (Map.findWithDefault [] k timerMap)) m
+          where insertDefault (k, z) = Map.insert k (defaultTimer {timerSetting = Left $ zoneDefault z} : Map.findWithDefault [] k timerMap)
                 defaultTimer = Timer
                     { timerStart = TimerDaily 0
                     , timerEnd = TimerDaily 0

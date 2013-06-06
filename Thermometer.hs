@@ -4,12 +4,13 @@ module Thermometer
     , ThermometerId
     , loadThermometers
     , readThermometers
+    , getTemperatureXml
     ) where
 
 import System.Directory (getDirectoryContents)
 import Text.Regex.Posix ((=~))
 import qualified Data.Map as Map
-import Text.XML.Light (parseXML, findAttr, QName(..))
+import qualified Text.XML.Light as X
 import System.IO (readFile)
 import Data.Traversable
 import Data.Maybe (fromMaybe)
@@ -50,12 +51,12 @@ loadThermometers file owDir arexxDir = do
     -- sequence flips Maybe (IO []) -> IO (Maybe [])
     owPaths <- Data.Traversable.sequence $ fmap locateOwThermometers owDir
     str <- readFile file
-    return (thermometers (fmap Map.fromList owPaths) (rootChildren (parseXML str)))
+    return (thermometers (fmap Map.fromList owPaths) (rootChildren (X.parseXML str)))
   where
     thermometers owPathMap = map (\e -> Thermometer
         { thermometerId = attr "id" e
         , thermometerDevice = thermometerDevice (attr "type" e) (attr "device-id" e)
-        , thermometerCorrection = maybe 0 read (findAttr (QName "correction" Nothing Nothing) e)
+        , thermometerCorrection = maybe 0 read (X.findAttr (X.QName "correction" Nothing Nothing) e)
         })
       where
         thermometerDevice "1wire" id =
@@ -93,3 +94,15 @@ readThermometerRaw path = do
     case result of
         Left e  -> print e >> return Nothing
         Right t -> return (Just t)
+
+getTemperatureXml :: Map.Map ThermometerId (Maybe Temperature) -> String
+getTemperatureXml ts = 
+    X.ppTopElement $ X.Element (X.QName "temperatures" Nothing Nothing) [] 
+        [X.Elem (X.Element (X.QName "temperature" Nothing Nothing) 
+            [ X.Attr (X.QName "thermometer-id" Nothing Nothing) (fst t)]
+            [ X.Text (X.CData X.CDataText (tStr (snd t)) Nothing) ]
+            Nothing)
+        | t <- Map.toList ts] Nothing
+  where
+    tStr Nothing = "Unknown"
+    tStr (Just t) = show t
