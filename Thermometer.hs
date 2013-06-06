@@ -17,7 +17,7 @@ import Data.Maybe (fromMaybe)
 import qualified Data.ByteString.Char8 as BS
 import Data.Text.Read (hexadecimal)
 import Data.Text (pack)
-import Control.Exception (try, SomeException)
+import Control.Exception (try, IOException)
 import Control.Monad (foldM)
 
 import Xml (rootChildren, attr)
@@ -90,10 +90,10 @@ readThermometer Thermometer {thermometerDevice=ArexxDevice path, thermometerCorr
         fromIntegral n * 0.0078 + c
 
 readThermometerRaw path = do
-    result <- try (BS.readFile path) :: IO (Either SomeException BS.ByteString)
+    result <- try (BS.readFile path) :: IO (Either IOException BS.ByteString)
     case result of
-        Left e  -> print e >> return Nothing
         Right t -> return (Just t)
+        Left e  -> return Nothing
 
 getTemperatureXml :: Map.Map ThermometerId (Maybe Temperature) -> String
 getTemperatureXml ts = 
