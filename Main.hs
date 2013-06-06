@@ -4,11 +4,12 @@ import System.Console.GetOpt (OptDescr(Option), ArgDescr(ReqArg, NoArg), usageIn
 import System.Environment (getProgName, getArgs)
 import System.Exit (exitSuccess)
 import Data.List (intercalate)
-import Control.Concurrent (threadDelay, forkIO, putMVar, tryTakeMVar, newEmptyMVar)
+import Control.Concurrent (threadDelay, forkIO, putMVar, takeMVar, newEmptyMVar)
 import Control.Monad (forever)
 import System.Directory (renameFile)
 import qualified Data.ByteString.Char8 as BS
 import System.INotify (initINotify, addWatch, EventVariety(..))
+import System.Timeout (timeout)
 
 import Thermometer
 import Zone
@@ -130,9 +131,9 @@ main = do
             controlStates <- evalControlConditions thermostatStates controls
             saveState runDir "control-state.xml" $ getControlStateXml controlStates
             actuateControls controlStates controls
-            reload <- tryTakeMVar mvar
+            reload <- timeout (5*10^6) (takeMVar mvar)
             case reload of
-                Nothing -> threadDelay (5*10^6) >> loop thermometers thermostats controls runDir
+                Nothing -> loop thermometers thermostats controls runDir
                 otherwise -> return ()
 
 -- write to a temporary file and rename into place
