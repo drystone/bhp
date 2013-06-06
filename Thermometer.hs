@@ -1,9 +1,9 @@
 module Thermometer
     (
       Temperature
-    , Thermometer
+    , ThermometerId
     , loadThermometers
-    , readThermometer
+    , readThermometers
     ) where
 
 import System.Directory (getDirectoryContents)
@@ -16,11 +16,13 @@ import Data.Maybe (fromMaybe)
 import qualified Data.ByteString.Char8 as BS
 import Data.Text.Read (hexadecimal)
 import Data.Text (pack)
-import Control.Exception
+import Control.Exception (try, SomeException)
+import Control.Monad (foldM)
 
 import Xml (rootChildren, attr)
 
 type Temperature = Float
+type ThermometerId = String
 type ThermometerDeviceId = String
 
 data ThermometerDevice = OwDevice (Maybe FilePath)
@@ -28,7 +30,8 @@ data ThermometerDevice = OwDevice (Maybe FilePath)
     deriving (Show)
 
 data Thermometer = Thermometer
-    { thermometerDevice     :: ThermometerDevice
+    { thermometerId         :: ThermometerId
+    , thermometerDevice     :: ThermometerDevice
     , thermometerCorrection :: Float }
     deriving (Show)
 
@@ -47,13 +50,14 @@ loadThermometers file owDir arexxDir = do
     -- sequence flips Maybe (IO []) -> IO (Maybe [])
     owPaths <- Data.Traversable.sequence $ fmap locateOwThermometers owDir
     str <- readFile file
-    return $ foldr (extract owPaths) Map.empty (rootChildren $ parseXML str)
+    return (thermometers (fmap Map.fromList owPaths) (rootChildren (parseXML str)))
   where
-    extract owPaths e = Map.insert (attr "id" e) Thermometer
-        { thermometerDevice = thermometerDevice (attr "type" e) (attr "device-id" e)
+    thermometers owPathMap = map (\e -> Thermometer
+        { thermometerId = attr "id" e
+        , thermometerDevice = thermometerDevice (attr "type" e) (attr "device-id" e)
         , thermometerCorrection = maybe 0 read (findAttr (QName "correction" Nothing Nothing) e)
-        }
-      where 
+        })
+      where
         thermometerDevice "1wire" id =
             case owPathMap of
                 Just m   -> OwDevice (Map.lookup id m)
@@ -63,7 +67,8 @@ loadThermometers file owDir arexxDir = do
                 Just dir -> ArexxDevice (dir ++ ('/':id))
                 Nothing  -> error "Cannot use Arexx device without specifying arexx mountpoint with -a"
 
-        owPathMap = fmap Map.fromList owPaths
+readThermometers = foldM f Map.empty
+  where f m d = readThermometer d >>= \t -> return $ Map.insert (thermometerId d) t m
 
 readThermometer :: Thermometer -> IO (Maybe Temperature)
 

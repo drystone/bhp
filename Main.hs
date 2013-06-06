@@ -5,6 +5,7 @@ import System.Environment (getProgName, getArgs)
 import System.Exit (exitSuccess)
 import Data.List (intercalate)
 import Control.Concurrent (threadDelay)
+import Control.Monad (forever)
 
 import Thermometer
 import Zone
@@ -107,14 +108,14 @@ main = do
     routines <- loadRoutines (configDir ++ "/routines.xml") zones
     overrides <- loadOverrides (libDir ++ "/overrides.xml") zones
     thermometers <- loadThermometers (configDir ++ "/thermometers.xml") owDir arexxDir
-    thermostats <- loadThermostats (configDir ++ "/thermostats.xml") thermometers routines overrides
-    controls <- loadControls (configDir ++ "/controls.xml") udinDir fht8vDir thermostats
-    loop controls
-
-loop :: Controls -> IO ()
-loop controls = do
-    sequence_ $ updateControls controls
-    threadDelay 5000000
-    loop controls
-    return ()
-
+    thermostats <- loadThermostats (configDir ++ "/thermostats.xml") routines overrides
+    controls <- loadControls (configDir ++ "/controls.xml") udinDir fht8vDir
+    forever (loop thermometers thermostats controls)
+  where
+    loop thermometers thermostats controls = do
+        temperatures <- readThermometers thermometers
+        thermostatStates <- testThermostats temperatures thermostats
+        controlStates <- evalControlConditions thermostatStates controls
+        actuateControls controlStates controls
+        threadDelay 5000000
+        return ()
