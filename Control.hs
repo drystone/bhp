@@ -87,8 +87,8 @@ loadControls file udinDir fht8vDir = do
         findMacroEl id rootEl = fromJust $ find (\e -> attr "id" e == id) $ findMacroEls rootEl
 
 
-evalControlConditions :: Map.Map ThermostatId Bool -> [Control] -> IO ([Control])
-evalControlConditions thermostatStates controls = mapM ecc controls
+evalControlConditions :: [Thermostat] -> [Control] -> IO ([Control])
+evalControlConditions thermostats controls = mapM ecc controls
   where 
     ecc c = do 
         bState <- evalCondition (controlCondition c)
@@ -99,7 +99,7 @@ evalControlConditions thermostatStates controls = mapM ecc controls
     evalCondition (ControlConditionNot c) = fmap not (evalCondition c)
     evalCondition (ControlConditionOr cs) = fmap (True `elem`) (mapM evalCondition cs)
     evalCondition (ControlConditionAnd cs) = fmap (not . (False `elem`)) (mapM evalCondition cs)
-    evalCondition (ControlConditionOver tid) = return $ fromJust $ Map.lookup tid thermostatStates
+    evalCondition (ControlConditionOver tid) = return $ thermostatState (fromJust $ find (\t -> thermostatId t == tid) thermostats) == ThermostatStateOver
     evalCondition (ControlConditionOn cid) = return $ controlState (fromJust $ find (\c -> controlId c == cid) controls) == ControlStateOn
     evalCondition (ControlConditionBefore cid d) = do
         let c = fromJust $ find (\c -> controlId c == cid) controls

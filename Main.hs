@@ -126,14 +126,14 @@ main = do
         loop thermometers thermostats controls runDir = do
             thermometers' <- readThermometers thermometers
             saveState runDir "temperatures.xml" $ getTemperatureXml thermometers'
-            thermostatStates <- testThermostats thermometers' thermostats
-            saveState runDir "state.xml" $ getThermostatStateXml thermostatStates
-            controls' <- evalControlConditions thermostatStates controls
+            thermostats' <- testThermostats thermometers' thermostats
+            saveState runDir "state.xml" $ getThermostatStateXml thermostats'
+            controls' <- evalControlConditions thermostats' controls
             saveState runDir "control-state.xml" $ getControlStateXml controls'
             actuateControls controls'
             reload <- timeout (5*10^6) (takeMVar mvar)
             case reload of
-                Nothing -> loop thermometers' thermostats controls' runDir
+                Nothing -> loop thermometers' thermostats' controls' runDir
                 otherwise -> return ()
 
 -- write to a temporary file and rename into place
