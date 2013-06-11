@@ -19,7 +19,7 @@ import qualified Data.ByteString.Char8 as BS
 import Data.Text.Read (hexadecimal)
 import Data.Text (pack)
 import Control.Exception (try, IOException)
-import Control.Monad (foldM)
+import System.Timeout (timeout)
 
 import Xml (rootChildren, attr)
 
@@ -71,7 +71,13 @@ loadThermometers file owDir arexxDir = do
                 Just dir -> ArexxDevice (dir ++ ('/':id))
                 Nothing  -> error "Cannot use Arexx device without specifying arexx mountpoint with -a"
 
-readThermometers = mapM (\d -> readThermometer d >>= (\t -> return $ d { thermometerReading = t }))
+readThermometers :: [Thermometer] -> IO [Thermometer]
+readThermometers = mapM rt
+  where rt d = do
+            reading <- timeout (10^3) (readThermometer d)
+            case reading of
+                Nothing -> return d
+                Just t  -> return $ d {thermometerReading = t}
 
 readThermometer :: Thermometer -> IO (Maybe Temperature)
 
