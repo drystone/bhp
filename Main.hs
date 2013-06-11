@@ -128,12 +128,12 @@ main = do
             saveState runDir "temperatures.xml" $ getTemperatureXml temperatures
             thermostatStates <- testThermostats temperatures thermostats
             saveState runDir "state.xml" $ getThermostatStateXml thermostatStates
-            controlStates <- evalControlConditions thermostatStates controls
-            saveState runDir "control-state.xml" $ getControlStateXml controlStates
-            actuateControls controlStates controls
+            controls' <- evalControlConditions thermostatStates controls
+            saveState runDir "control-state.xml" $ getControlStateXml controls'
+            actuateControls controls'
             reload <- timeout (5*10^6) (takeMVar mvar)
             case reload of
-                Nothing -> loop thermometers thermostats controls runDir
+                Nothing -> loop thermometers thermostats controls' runDir
                 otherwise -> return ()
 
 -- write to a temporary file and rename into place

@@ -11,6 +11,8 @@ import Data.Maybe (fromJust)
 import Data.List (find)
 import qualified Data.ByteString.Char8 as BS
 import Control.Monad (mapM_, foldM)
+import Data.Time.Calendar (Day(ModifiedJulianDay))
+import Data.Time.Clock (UTCTime(UTCTime, utctDay, utctDayTime), diffUTCTime, getCurrentTime)
 
 import Thermostat
 import Xml
@@ -18,10 +20,15 @@ import Xml
 type ControlId = String
 type ControlPath = String
 
+data ControlState = ControlStateOn | ControlStateOff
+    deriving (Eq, Show)
+
 data Control = Control
     { controlId         :: ControlId
-    , controlPath :: ControlPath
-    , controlCondition  :: ControlCondition }
+    , controlPath       :: ControlPath
+    , controlCondition  :: ControlCondition
+    , controlState      :: ControlState
+    , controlChange     :: UTCTime }
     deriving (Show)
 
 data ControlCondition = ControlConditionNot ControlCondition
@@ -29,13 +36,22 @@ data ControlCondition = ControlConditionNot ControlCondition
                       | ControlConditionAnd [ControlCondition]
                       | ControlConditionOver ThermostatId
                       | ControlConditionOn Control
+                      | NoControlCondition
     deriving (Show)
+
+controlDefault = Control {
+    controlId = ""
+  , controlPath = ""
+  , controlCondition = NoControlCondition
+  , controlState = ControlStateOff
+  , controlChange = UTCTime (ModifiedJulianDay 0) 0
+}
 
 loadControls file udinDir fht8vDir = do
     str <- readFile file
     let rootEl = last $ X.onlyElems $ X.parseXML str
     return $ map (extractControl rootEl) (findControlEls rootEl)
-  where extractControl rootEl el = Control
+  where extractControl rootEl el = controlDefault
             { controlId = attr "id" el
             , controlPath = controlPath (attr "type" el) (attr "device-code" el)
             , controlCondition  = extractCondition rootEl $ head $ X.elChildren el }
@@ -69,34 +85,33 @@ loadControls file udinDir fht8vDir = do
         findMacroEl id rootEl = fromJust $ find (\e -> attr "id" e == id) $ findMacroEls rootEl
 
 
-evalControlConditions :: Map.Map ThermostatId Bool -> [Control] -> IO (Map.Map ControlId Bool)
-evalControlConditions thermostatStates = foldM fn Map.empty
+evalControlConditions :: Map.Map ThermostatId Bool -> [Control] -> IO ([Control])
+evalControlConditions thermostatStates = mapM ecc
   where
-    fn m c = evalCondition (controlCondition c) >>= \s -> return $ Map.insert (controlId c) s m
-
+    ecc c = do 
+        bState <- evalCondition (controlCondition c)
+        let newState = if bState then ControlStateOn else ControlStateOff
+        ct <- getCurrentTime
+        return $ c { controlState    = newState
+                   , controlChange   = if newState /= controlState c then ct else controlChange c }
+      where
     evalCondition (ControlConditionNot c) = fmap not (evalCondition c)
     evalCondition (ControlConditionOr cs) = fmap (True `elem`) (mapM evalCondition cs)
     evalCondition (ControlConditionAnd cs) = fmap (not . (False `elem`)) (mapM evalCondition cs)
     evalCondition (ControlConditionOver t) = return $ fromJust $ Map.lookup t thermostatStates
-    evalCondition (ControlConditionOn c) = testControl c
+    evalCondition (ControlConditionOn c) = return $ controlState c == ControlStateOn
 
-    testControl control = do
-        state <- BS.readFile (controlPath control)
-        case BS.unpack state of
-            ('1':_) -> return True
-            _       -> return False
+actuateControls :: [Control] -> IO ()
+actuateControls = mapM_ actuate
+  where actuate c = log >> BS.writeFile (controlPath c) (BS.pack $ if controlState c == ControlStateOn then "1" else "0")
+          where log = putStrLn ("Control id: " ++ controlId c ++ ", state: " ++ show (controlState c))
 
-actuateControls :: Map.Map ControlId Bool -> [Control] -> IO ()
-actuateControls controlStates = mapM_ actuate
-  where actuate c = log >> BS.writeFile (controlPath c) (BS.pack $ if state then "1" else "0")
-          where state = fromJust (Map.lookup (controlId c) controlStates)
-                log = putStrLn ("Control id: " ++ controlId c ++ ", state: " ++ show state)
-
-getControlStateXml :: Map.Map ThermostatId Bool -> String
-getControlStateXml ts = 
+getControlStateXml :: [Control] -> String
+getControlStateXml cs = 
     X.ppTopElement $ X.Element (X.QName "control-states" Nothing Nothing) [] 
         [X.Elem (X.Element (X.QName "control-state" Nothing Nothing) 
-            [ X.Attr (X.QName "id" Nothing Nothing) (fst t)]
-            [ X.Text (X.CData X.CDataText (if snd t then "on" else "off") Nothing) ]
+            [ X.Attr (X.QName "id" Nothing Nothing) (controlId c)]
+            [ X.Text (X.CData X.CDataText (if controlState c == ControlStateOn then "on" else "off") Nothing) ]
             Nothing)
-        | t <- Map.toList ts] Nothing
+        | c <- cs] Nothing
+
