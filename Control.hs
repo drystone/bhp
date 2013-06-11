@@ -10,9 +10,9 @@ import qualified Data.Map as Map
 import Data.Maybe (fromJust)
 import Data.List (find)
 import qualified Data.ByteString.Char8 as BS
-import Control.Monad (mapM_, foldM)
+import Control.Monad (mapM_)
 import Data.Time.Calendar (Day(ModifiedJulianDay))
-import Data.Time.Clock (UTCTime(UTCTime, utctDay, utctDayTime), diffUTCTime, getCurrentTime, NominalDiffTime, addUTCTime)
+import Data.Time.Clock (UTCTime(UTCTime), getCurrentTime, NominalDiffTime, addUTCTime)
 
 import Thermostat
 import Xml

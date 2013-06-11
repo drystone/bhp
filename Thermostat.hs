@@ -101,3 +101,4 @@ getThermostatStateXml ts =
             [ X.Text (X.CData X.CDataText (if thermostatState t == ThermostatStateOver then "over" else "under") Nothing) ]
             Nothing)
         | t <- ts] Nothing
+
