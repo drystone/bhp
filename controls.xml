@@ -72,6 +72,10 @@
 
   <control id="solar" type="udin" device-code="r8">
     <or>
+      <and>
+        <on control-id="solar"/>
+        <before control-id="solar" timeout="60"/>
+      </and>
       <over thermostat-id="solar"/>
       <under thermostat-id="frost"/>
     </or>
