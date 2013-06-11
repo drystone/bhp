@@ -9,6 +9,7 @@ import qualified Text.XML.Light as X
 import qualified Data.Map as Map
 import Data.Maybe (fromJust, fromMaybe)
 import Control.Monad (foldM)
+import Data.List (find)
 
 import Xml
 import Thermometer
@@ -64,12 +65,12 @@ zoneTimers zid routines overrides =
             Nothing -> []
             Just t -> [t]
 
-testThermostats temperatures = foldM fn Map.empty
-  where fn m s = testThermostat temperatures s >>= \result -> return $ Map.insert (thermostatId s) result m
+testThermostats thermometers = foldM fn Map.empty
+  where fn m s = testThermostat thermometers s >>= \result -> return $ Map.insert (thermostatId s) result m
 
-testThermostat :: Map.Map ThermometerId (Maybe Temperature) -> Thermostat -> IO Bool
-testThermostat temperatures stat =
-    case fromJust $ Map.lookup (thermostatThermometer stat) temperatures of
+testThermostat :: [Thermometer] -> Thermostat -> IO Bool
+testThermostat thermometers stat =
+    case getReading (thermostatThermometer stat) of
         Nothing   -> log "failed" "unknown" >> return (thermostatFailsafe stat)
         Just temp -> do
             target <- getTarget (thermostatTarget stat)
@@ -78,8 +79,9 @@ testThermostat temperatures stat =
                 Just tt -> log (show (temp+offset)) (show tt) >> return (temp+offset > tt)
   where offset = thermostatOffset stat
         getTarget (TimerTarget tt)       = timerTarget tt
-        getTarget (ThermometerTarget tt) = return $ fromJust $ Map.lookup tt temperatures
+        getTarget (ThermometerTarget tt) = return $ getReading tt
         getTarget (TemperatureTarget tt) = return $ Just tt
+        getReading tid = thermometerReading $ fromJust $ find (\t -> thermometerId t == tid) thermometers
         log cur tgt = putStrLn ("Thermostat id: " ++ thermostatId stat ++ ", current: " ++ cur ++ ", target: " ++ tgt)
 
 getThermostatStateXml :: Map.Map ThermostatId Bool -> String

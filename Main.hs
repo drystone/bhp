@@ -124,16 +124,16 @@ main = do
         daemon opts mvar
       where
         loop thermometers thermostats controls runDir = do
-            temperatures <- readThermometers thermometers
-            saveState runDir "temperatures.xml" $ getTemperatureXml temperatures
-            thermostatStates <- testThermostats temperatures thermostats
+            thermometers' <- readThermometers thermometers
+            saveState runDir "temperatures.xml" $ getTemperatureXml thermometers'
+            thermostatStates <- testThermostats thermometers' thermostats
             saveState runDir "state.xml" $ getThermostatStateXml thermostatStates
             controls' <- evalControlConditions thermostatStates controls
             saveState runDir "control-state.xml" $ getControlStateXml controls'
             actuateControls controls'
             reload <- timeout (5*10^6) (takeMVar mvar)
             case reload of
-                Nothing -> loop thermometers thermostats controls' runDir
+                Nothing -> loop thermometers' thermostats controls' runDir
                 otherwise -> return ()
 
 -- write to a temporary file and rename into place

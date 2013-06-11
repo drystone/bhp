@@ -2,6 +2,7 @@ module Thermometer
     (
       Temperature
     , ThermometerId
+    , Thermometer(Thermometer, thermometerId, thermometerReading)
     , loadThermometers
     , readThermometers
     , getTemperatureXml
@@ -12,7 +13,7 @@ import Text.Regex.Posix ((=~))
 import qualified Data.Map as Map
 import qualified Text.XML.Light as X
 import System.IO (readFile)
-import Data.Traversable
+import Data.Traversable (sequence)
 import Data.Maybe (fromMaybe)
 import qualified Data.ByteString.Char8 as BS
 import Data.Text.Read (hexadecimal)
@@ -33,7 +34,8 @@ data ThermometerDevice = OwDevice (Maybe FilePath)
 data Thermometer = Thermometer
     { thermometerId         :: ThermometerId
     , thermometerDevice     :: ThermometerDevice
-    , thermometerCorrection :: Float }
+    , thermometerCorrection :: Temperature
+    , thermometerReading    :: Maybe Temperature }
     deriving (Show)
 
 locateOwThermometers dir = do
@@ -57,6 +59,7 @@ loadThermometers file owDir arexxDir = do
         { thermometerId = attr "id" e
         , thermometerDevice = thermometerDevice (attr "type" e) (attr "device-id" e)
         , thermometerCorrection = maybe 0 read (X.findAttr (X.QName "correction" Nothing Nothing) e)
+        , thermometerReading = Nothing
         })
       where
         thermometerDevice "1wire" id =
@@ -68,8 +71,7 @@ loadThermometers file owDir arexxDir = do
                 Just dir -> ArexxDevice (dir ++ ('/':id))
                 Nothing  -> error "Cannot use Arexx device without specifying arexx mountpoint with -a"
 
-readThermometers = foldM f Map.empty
-  where f m d = readThermometer d >>= \t -> return $ Map.insert (thermometerId d) t m
+readThermometers = mapM (\d -> readThermometer d >>= (\t -> return $ d { thermometerReading = t }))
 
 readThermometer :: Thermometer -> IO (Maybe Temperature)
 
@@ -95,14 +97,14 @@ readThermometerRaw path = do
         Right t -> return (Just t)
         Left e  -> return Nothing
 
-getTemperatureXml :: Map.Map ThermometerId (Maybe Temperature) -> String
+getTemperatureXml :: [Thermometer] -> String
 getTemperatureXml ts = 
     X.ppTopElement $ X.Element (X.QName "temperatures" Nothing Nothing) [] 
         [X.Elem (X.Element (X.QName "temperature" Nothing Nothing) 
-            [ X.Attr (X.QName "thermometer-id" Nothing Nothing) (fst t)]
-            [ X.Text (X.CData X.CDataText (tStr (snd t)) Nothing) ]
+            [ X.Attr (X.QName "thermometer-id" Nothing Nothing) (thermometerId t)]
+            [ X.Text (X.CData X.CDataText (tStr (thermometerReading t)) Nothing) ]
             Nothing)
-        | t <- Map.toList ts] Nothing
+        |  t <- ts] Nothing
   where
     tStr Nothing = "Unknown"
     tStr (Just t) = show t
