@@ -39,9 +39,9 @@ data Timer = Timer
 
 duration :: String -> NominalDiffTime
 duration ('P':cs) = duration cs
-duration ('T':cs) = duration cs
 duration cs = fromIntegral (duration' 0 cs)
   where duration' a ('D':cs) = 24 * 3600 * a + duration' 0 cs
+        duration' a ('T':cs) = a + duration' 0 cs
         duration' a ('H':cs) = 3600 * a + duration' 0 cs
         duration' a ('M':cs) = 60 * a + duration' 0 cs
         duration' a ('S':_) = a
