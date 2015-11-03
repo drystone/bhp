@@ -48,7 +48,7 @@ controlDefault = Control {
   , controlChange = UTCTime (ModifiedJulianDay 0) 0
 }
 
-loadControls file udinDir fht8vDir = do
+loadControls file udinDir fht8vDir dkrDir = do
     str <- readFile file
     let rootEl = last $ X.onlyElems $ X.parseXML str
     return $ map (extractControl rootEl) (findControlEls rootEl)
@@ -80,6 +80,10 @@ loadControls file udinDir fht8vDir = do
             case fht8vDir of
                 Just dir -> dir ++ ('/':id)
                 Nothing  -> error "Cannot use fht8v device without specifying fht8v mountpoint with -f"
+        controlPath "denkovi" id =
+            case dkrDir of
+                Just dir -> dir ++ ('/':id)
+                Nothing  -> error "Cannot use Denkovi device without specifying mountpoint with -d"
 
         findControlEls = X.filterChildren (\e -> X.qName (X.elName e) == "control") 
 

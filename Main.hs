@@ -21,11 +21,6 @@ import Control
 import qualified Data.Map as Map
 import Data.Maybe
 
-data Flag = ArexxDir (Maybe String)
-            | OwDir (Maybe String)
-            | UdinDir (Maybe String)
-            | Fht8vDir (Maybe String)
-
 data Options = Options { optConfigDir   :: String
                        , optRunDir      :: String
                        , optLibDir      :: String
@@ -33,6 +28,7 @@ data Options = Options { optConfigDir   :: String
                        , optOwDir       :: Maybe String
                        , optUdinDir     :: Maybe String
                        , optFht8vDir    :: Maybe String
+                       , optDkrDir      :: Maybe String
                        }
 
 startOptions = Options { optConfigDir   = "/etc/bhp"
@@ -42,6 +38,7 @@ startOptions = Options { optConfigDir   = "/etc/bhp"
                        , optOwDir       = Nothing
                        , optUdinDir     = Nothing
                        , optFht8vDir    = Nothing
+                       , optDkrDir      = Nothing
                        }
 
 options =
@@ -87,6 +84,12 @@ options =
             "DIRECTORY")
         "fht8v (CUL) device mount point"
 
+    , Option "d" ["denkovi-dir"]
+        (ReqArg
+            (\arg opt -> return opt { optDkrDir = Just arg })
+            "DIRECTORY")
+        "Denkovi DAEnetIP2 switch mount point"
+ 
     , Option "h" ["help"]
         (NoArg
             (\_ -> do
@@ -112,14 +115,15 @@ main = do
                     , optArexxDir   = arexxDir
                     , optOwDir      = owDir
                     , optUdinDir    = udinDir
-                    , optFht8vDir   = fht8vDir } = opts
+                    , optFht8vDir   = fht8vDir
+		    , optDkrDir	    = dkrDir } = opts
         putStrLn "(Re)loading configuration"
         zones <- loadZones (configDir ++ "/zones.xml")
         routines <- loadRoutines (configDir ++ "/routines.xml") zones
         overrides <- loadOverrides (libDir ++ "/overrides.xml") zones
         thermometers <- loadThermometers (configDir ++ "/thermometers.xml") owDir arexxDir
         thermostats <- loadThermostats (configDir ++ "/thermostats.xml") routines overrides
-        controls <- loadControls (configDir ++ "/controls.xml") udinDir fht8vDir
+        controls <- loadControls (configDir ++ "/controls.xml") udinDir fht8vDir dkrDir
         loop thermometers thermostats controls runDir
         daemon opts mvar
       where
